@@ -1,0 +1,104 @@
+/* ============================================================
+   REPORTS & P&L — Page Styles
+   ============================================================ */
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-6);
+  align-items: start;
+}
+.left-col  { display: flex; flex-direction: column; gap: var(--space-6); }
+.right-col { display: flex; flex-direction: column; gap: var(--space-6); }
+
+/* ── P&L Table ── */
+.pnl-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--surface-container-high);
+}
+.pnl-row:last-child { border-bottom: none; }
+.pnl-label { font-size: var(--text-body-sm); color: var(--on-surface-variant); }
+.pnl-value {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: var(--text-body-md);
+  color: var(--on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.pnl-value.positive { color: var(--secondary); }
+.pnl-value.negative { color: var(--error); }
+.pnl-row.total-row {
+  background: var(--surface-container-low);
+  border-radius: var(--round-md);
+  padding: var(--space-4);
+  margin-top: var(--space-2);
+  border-bottom: none;
+}
+.pnl-row.total-row .pnl-label {
+  font-weight: 700;
+  color: var(--on-surface);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--text-label-md);
+}
+.pnl-row.total-row .pnl-value { font-size: var(--text-title-lg); color: var(--primary); }
+
+/* ── Expense Form ── */
+.expense-form { display: flex; flex-direction: column; gap: var(--space-4); }
+
+/* ── Peak Hours Card ── */
+.peak-hour-card {
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  border-radius: var(--round-lg);
+  padding: var(--space-6);
+  color: var(--on-primary);
+}
+.peak-hour-title {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: var(--text-title-md);
+  margin-bottom: var(--space-2);
+}
+.peak-hour-stat {
+  font-family: var(--font-headline);
+  font-size: var(--text-display-md);
+  font-weight: 800;
+  margin-top: var(--space-4);
+}
+.peak-hour-label { font-size: var(--text-label-sm); opacity: 0.7; }
+
+/* ── Pending Approvals ── */
+.approval-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--surface-container-high);
+}
+.approval-item:last-child { border-bottom: none; }
+.approval-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--round-md);
+  background: var(--primary-fixed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.approval-icon .material-symbols-rounded { font-size: 18px; color: var(--primary); }
+.approval-info { flex: 1; min-width: 0; }
+.approval-id   { font-size: var(--text-label-sm); color: var(--on-surface-variant); font-family: monospace; }
+.approval-desc { font-weight: 600; font-size: var(--text-body-sm); color: var(--on-surface); }
+.approval-by   { font-size: var(--text-label-sm); color: var(--on-surface-variant); }
+.approval-amount {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: var(--text-body-md);
+  color: var(--on-surface);
+  white-space: nowrap;
+}
+.approval-actions { display: flex; gap: var(--space-2); margin-top: var(--space-2); }

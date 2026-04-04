@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Reports & P&L</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="../styles/reports.css" />
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+
+      <!-- User Profile Action -->
+      <button class="nav-item" style="margin-bottom: var(--space-4); margin-top: auto;" onclick="toggleProfileMenu(event)">
+        <!-- FontAwesome SVG -->
+        <svg style="width: 20px; height: 20px; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- Header -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Financial Performance Reports</h1>
+          <p class="page-subtitle">Monthly P&L, revenue trends, and expense management.</p>
+        </div>
+        <div class="page-actions">
+          <span class="badge badge-neutral">March 2026</span>
+          <button class="btn btn-primary" onclick="window.print()">
+            <span class="material-symbols-rounded">download</span>
+            Export PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="reports-grid">
+        <div class="left-col">
+
+          <!-- P&L Statement -->
+          <div class="card fade-in-up">
+            <div class="flex items-center justify-between" style="margin-bottom: var(--space-5);">
+              <div>
+                <div class="card-title">Profit & Loss Statement</div>
+                <div class="card-subtitle" style="margin-bottom:0;">March 2026 · All figures in USD</div>
+              </div>
+              <span class="badge badge-success">+8.3% MoM</span>
+            </div>
+            <div id="pnl-table"></div>
+          </div>
+
+          <!-- Revenue vs Expenses Chart -->
+          <div class="card fade-in-up">
+            <div class="card-title">Revenue vs. Expenses</div>
+            <div class="card-subtitle">Weekly performance tracking</div>
+            <div class="chart-container" style="height: 220px;">
+              <canvas id="rev-exp-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Slow Moving Alerts -->
+          <div class="card fade-in-up">
+            <div class="card-title" style="margin-bottom: var(--space-4);">Slow-Moving Inventory Alerts</div>
+            <div class="alert-list" id="slow-moving-list"></div>
+          </div>
+
+        </div>
+        <div class="right-col">
+
+          <!-- Peak Hours -->
+          <div class="peak-hour-card fade-in-up">
+            <div class="peak-hour-title">⚡ Peak Sales Hours</div>
+            <p style="font-size: var(--text-body-sm); opacity: 0.85; line-height: 1.5;">
+              Transaction volume spikes by <strong>340%</strong> during this window. Consider allocating +2 staff members for checkout optimization.
+            </p>
+            <div style="font-size: var(--text-label-sm); opacity: 0.7; margin-top: var(--space-3);">11:00 AM — 1:30 PM</div>
+            <div class="peak-hour-stat">$4,250</div>
+            <div class="peak-hour-label">Hourly Average Revenue</div>
+          </div>
+
+          <!-- Record Expense -->
+          <div class="card fade-in-up">
+            <div class="card-title" style="margin-bottom: var(--space-5);">Record Expense</div>
+            <div class="expense-form">
+              <div class="input-group">
+                <label class="input-label">Description</label>
+                <input class="input-field" id="exp-desc" type="text" placeholder="e.g. Logistics - March" />
+              </div>
+              <div class="form-row">
+                <div class="input-group">
+                  <label class="input-label">Amount ($)</label>
+                  <input class="input-field" id="exp-amount" type="number" min="0" step="0.01" placeholder="0.00" />
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Category</label>
+                  <input class="input-field" id="exp-category" type="text" placeholder="e.g. Logistics" />
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="recordExpense()">
+                <span class="material-symbols-rounded">add</span>
+                Record Expense
+              </button>
+            </div>
+            <div id="expense-list" style="margin-top: var(--space-5);"></div>
+          </div>
+
+          <!-- Pending Approvals -->
+          <div class="card fade-in-up">
+            <div class="card-title" style="margin-bottom: var(--space-4);">Pending Approvals</div>
+            <div id="approvals-list"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../../../data/store.js"></script>
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="../../../renderer/reports.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
+<script src="../../../outlets/outlets.js"></script>
+<script src="../../../scanner/scanner.js"></script>
+<script src="../../../exporter/exporter.js"></script>
+<script src="../../../alerts/alerts.js"></script>
+</body>
+</html>

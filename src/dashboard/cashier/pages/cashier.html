@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Dashboard</title>
+  <meta name="description" content="Real-time performance metrics for Precision Architect Main Warehouse." />
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize" title="Minimize">
+        <span class="material-symbols-rounded">remove</span>
+      </button>
+      <button class="titlebar-btn" id="btn-maximize" title="Maximize">
+        <span class="material-symbols-rounded">crop_square</span>
+      </button>
+      <button class="titlebar-btn close" id="btn-close" title="Close">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+
+      <!-- User Profile Action -->
+      <button class="nav-item" style="margin-bottom: var(--space-2); margin-top: auto;" onclick="toggleProfileMenu(event)">
+        <!-- FontAwesome SVG -->
+        <svg style="width: 20px; height: 20px; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+
+      <div style="padding: var(--space-4) var(--space-5); font-size: var(--text-label-sm); color: var(--on-surface-variant);">
+        Main Warehouse · v1.0.0
+      </div>
+    </aside>
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content" id="main-content">
+
+      <!-- Header -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Architecture Overview</h1>
+          <p class="page-subtitle">Real-time performance metrics for Precision Architect Main Warehouse.</p>
+        </div>
+        <div class="page-actions">
+          <div id="live-time" style="font-size: var(--text-label-md); color: var(--on-surface-variant); font-family: monospace;"></div>
+          <button class="btn btn-primary" onclick="navigateTo('pos')">
+            <span class="material-symbols-rounded">point_of_sale</span>
+            New Sale
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon primary">
+              <span class="material-symbols-rounded">payments</span>
+            </div>
+            <span class="kpi-badge">+12.4%</span>
+          </div>
+          <div class="kpi-value" id="kpi-sales">$24,592</div>
+          <div class="kpi-label">Daily Sales</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon secondary">
+              <span class="material-symbols-rounded">trending_up</span>
+            </div>
+            <span class="kpi-badge">+8.3%</span>
+          </div>
+          <div class="kpi-value">$8,120</div>
+          <div class="kpi-label">Total Profit</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon tertiary">
+              <span class="material-symbols-rounded">shopping_bag</span>
+            </div>
+            <span class="kpi-badge">Active</span>
+          </div>
+          <div class="kpi-value">42</div>
+          <div class="kpi-label">Active Orders</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon error">
+              <span class="material-symbols-rounded">warning</span>
+            </div>
+            <span class="kpi-badge alert">Critical</span>
+          </div>
+          <div class="kpi-value" id="kpi-low-stock">—</div>
+          <div class="kpi-label">Low Stock Alerts</div>
+        </div>
+      </div>
+
+      <!-- Main content grid -->
+      <div class="content-grid">
+        <div class="left-col">
+
+          <!-- Sales Chart -->
+          <div class="card fade-in-up">
+            <div class="flex items-center justify-between" style="margin-bottom: var(--space-5);">
+              <div>
+                <div class="card-title">Sales Trends</div>
+                <div class="card-subtitle" style="margin-bottom: 0;">Revenue performance across the previous week</div>
+              </div>
+              <span class="badge badge-success">This Week</span>
+            </div>
+            <div class="chart-container" style="height: 220px;">
+              <canvas id="sales-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card fade-in-up">
+            <div class="card-title">Quick Actions</div>
+            <div class="quick-actions-grid">
+              <button class="quick-action-btn" onclick="navigateTo('pos')">
+                <span class="material-symbols-rounded">add_shopping_cart</span>
+                New Sale
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('inventory')">
+                <span class="material-symbols-rounded">add_box</span>
+                Add Product
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('reports')">
+                <span class="material-symbols-rounded">summarize</span>
+                Generate Report
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('suppliers')">
+                <span class="material-symbols-rounded">local_shipping</span>
+                Restock Order
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('inventory')">
+                <span class="material-symbols-rounded">qr_code_scanner</span>
+                Scan Item
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('reports')">
+                <span class="material-symbols-rounded">account_balance</span>
+                Record Expense
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div class="right-col">
+
+          <!-- Stock Status -->
+          <div class="card fade-in-up">
+            <div class="card-title" style="margin-bottom: var(--space-4);">Stock Status</div>
+            <div id="stock-status-list"></div>
+          </div>
+
+          <!-- CATALOG INTELLIGENCE -->
+          <div class="card fade-in-up" style="background: var(--surface-container-highest); border: 1px solid var(--primary-fixed);">
+            <div class="card-title" style="color: var(--primary); display:flex; align-items:center; gap:8px;">
+              <span class="material-symbols-rounded">psychology</span>
+              Catalog Intelligence
+            </div>
+            <p style="font-size:12px; opacity:0.7; margin-bottom:12px;">Automated Lifecycle & Pricing Analyzers</p>
+            
+            <div style="display:flex; gap:var(--space-3); margin-top:var(--space-4);">
+              <div style="flex:1; text-align:center; padding:12px; background:var(--surface-container); border-radius:var(--round-md);">
+                <div id="dash-dead-count" style="font-size:24px; font-weight:700; color:#f44336;">0</div>
+                <div style="font-size:10px; opacity:0.7; text-transform:uppercase;">Dead Stock</div>
+              </div>
+              <div style="flex:1; text-align:center; padding:12px; background:var(--surface-container); border-radius:var(--round-md);">
+                <div id="dash-markup-count" style="font-size:24px; font-weight:700; color:#4caf50;">0</div>
+                <div style="font-size:10px; opacity:0.7; text-transform:uppercase;">Markups</div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%; margin-top:var(--space-4);" onclick="navigateTo('lifecycle')">
+              Open Analysis Suite
+            </button>
+          </div>
+
+          <!-- Best Sellers -->
+          <div class="card fade-in-up">
+            <div class="card-title" style="margin-bottom: var(--space-1);">Best Selling Products</div>
+            <div class="card-subtitle">Top performing items by volume and revenue</div>
+            <div id="best-sellers-list"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../../../data/store.js"></script>
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="dashboard.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
+<script src="../../../outlets/outlets.js"></script>
+<script src="../../../scanner/scanner.js"></script>
+<script src="../../../exporter/exporter.js"></script>
+<script src="../../../alerts/alerts.js"></script>
+</body>
+</html>

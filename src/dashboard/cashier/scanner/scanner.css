@@ -1,0 +1,55 @@
+/* ============================================================
+   scanner.css — Barcode Scanner Utility UI
+   ============================================================ */
+
+.scanner-status {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--round-full);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-label-sm);
+  font-weight: 600;
+  box-shadow: var(--shadow-2);
+  z-index: 1000;
+  opacity: 0.6;
+  transition: all var(--transition-base);
+  pointer-events: none;
+}
+
+.scanner-status .material-symbols-rounded {
+  font-size: 16px;
+}
+
+.scanner-status.active {
+  background: var(--primary-fixed);
+  color: var(--primary);
+  opacity: 1;
+  box-shadow: var(--shadow-sm), 0 0 12px rgba(9, 114, 211, 0.4);
+}
+
+.scanner-status.success {
+  background: color-mix(in srgb, #0a9396 20%, transparent);
+  color: #0a7a7e;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.scanner-status.error {
+  background: color-mix(in srgb, #ba1a1a 20%, transparent);
+  color: #ba1a1a;
+  opacity: 1;
+  transform: scale(1.05);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: scale(1.05) translateX(0); }
+  25% { transform: scale(1.05) translateX(-4px); }
+  75% { transform: scale(1.05) translateX(4px); }
+}

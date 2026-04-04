@@ -1,0 +1,109 @@
+/* ============================================================
+   DASHBOARD — Page Styles
+   ============================================================ */
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--space-6);
+  align-items: start;
+}
+.left-col  { display: flex; flex-direction: column; gap: var(--space-6); }
+.right-col { display: flex; flex-direction: column; gap: var(--space-6); }
+
+/* ── Quick Actions ── */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--surface-container-low);
+  border-radius: var(--round-lg);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--on-surface-variant);
+  font-family: var(--font-body);
+  font-size: var(--text-label-md);
+  font-weight: 600;
+  text-align: center;
+}
+.quick-action-btn:hover {
+  background: var(--primary-fixed);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.quick-action-btn .material-symbols-rounded { font-size: 28px; }
+
+/* ── Best Sellers ── */
+.best-seller-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--surface-container-high);
+}
+.best-seller-item:last-child { border-bottom: none; }
+.best-seller-rank {
+  font-family: var(--font-headline);
+  font-size: var(--text-display-lg);
+  font-weight: 800;
+  color: var(--surface-container-high);
+  line-height: 1;
+  width: 42px;
+  flex-shrink: 0;
+}
+.best-seller-info { flex: 1; min-width: 0; }
+.best-seller-name {
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.best-seller-sku {
+  font-size: var(--text-label-sm);
+  color: var(--on-surface-variant);
+  font-family: monospace;
+}
+.best-seller-revenue {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: var(--text-body-md);
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+/* ── Stock Status ── */
+.stock-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--surface-container-high);
+}
+.stock-item:last-child { border-bottom: none; }
+.stock-bar-track {
+  width: 80px;
+  height: 6px;
+  background: var(--surface-container-high);
+  border-radius: var(--round-full);
+  overflow: hidden;
+}
+.stock-bar-fill {
+  height: 100%;
+  border-radius: var(--round-full);
+  transition: width 0.8s ease;
+}
+.stock-bar-fill.high   { background: var(--secondary); }
+.stock-bar-fill.medium { background: var(--tertiary-fixed-dim); }
+.stock-bar-fill.low    { background: var(--error); }

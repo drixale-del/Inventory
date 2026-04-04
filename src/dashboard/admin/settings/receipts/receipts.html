@@ -1,0 +1,43 @@
+<!-- Receipts Settings Panel -->
+<div class="settings-panel-inner">
+  <div class="card-title">Receipt Settings</div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Auto-print Receipts</div>
+      <div class="setting-desc">Automatically print after each completed sale</div>
+    </div>
+    <button class="toggle" id="toggle-autoprint" onclick="ReceiptSettings.toggle('autoprint', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Email Receipts</div>
+      <div class="setting-desc">Send digital receipt to customer email</div>
+    </div>
+    <button class="toggle" id="toggle-email-receipt" onclick="ReceiptSettings.toggle('emailReceipt', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Include Logo on Receipt</div>
+      <div class="setting-desc">Print the Precision POS logo at the top of every receipt</div>
+    </div>
+    <button class="toggle" id="toggle-logo" onclick="ReceiptSettings.toggle('includeLogo', this)"></button>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label">Receipt Footer Text</label>
+    <input class="input-field" id="r-footer" type="text" value="Thank you for your business! Returns within 30 days." />
+  </div>
+
+  <div class="input-group">
+    <label class="input-label">Receipt Header Note (optional)</label>
+    <input class="input-field" id="r-header" type="text" placeholder="e.g. Official receipt — keep for records" />
+  </div>
+
+  <button class="btn btn-primary" style="align-self:flex-start;" onclick="ReceiptSettings.save()">
+    <span class="material-symbols-rounded">save</span> Save Receipt Settings
+  </button>
+  <span id="receipt-status" class="region-status-msg" style="display:none;"></span>
+</div>

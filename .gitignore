@@ -1,0 +1,10 @@
+node_modules/
+.env
+installers/
+dist/
+build/
+*.exe
+*.asar
+*.log
+linux-unpacked/
+win-unpacked/

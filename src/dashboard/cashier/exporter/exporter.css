@@ -1,0 +1,61 @@
+/* ============================================================
+   exporter.css — Universal Export UI
+   ============================================================ */
+
+.exporter-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.exporter-modal-overlay.open { display: flex; }
+
+.exporter-modal {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-5);
+  width: min(400px, 90vw);
+  box-shadow: var(--shadow-3);
+  animation: fade-in-up 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--on-surface);
+}
+
+.exporter-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-container-high);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--round-md);
+  color: var(--on-surface);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+.export-btn:hover {
+  background: var(--surface-container-highest);
+  border-color: var(--outline);
+}
+.export-btn .material-symbols-rounded {
+  font-size: 24px;
+}
+
+/* Specific button accents */
+.export-btn.excel .material-symbols-rounded { color: #107c41; }
+.export-btn.pdf .material-symbols-rounded { color: #f40f02; }
+.export-btn.csv .material-symbols-rounded { color: #0078d4; }

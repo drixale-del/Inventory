@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Precision POS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="../../../styles/modern-normalize.css">
+    <link rel="stylesheet" href="../../../styles/tokens.css">
+    <link rel="stylesheet" href="../../../styles/components.css">
+    <style>
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6); padding: var(--space-6); }
+        .nexus-card { background: var(--surface-container-high); border-radius: var(--round-md); padding: var(--space-6); border: 1px solid var(--outline-variant); }
+        .nexus-header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); color: var(--primary); }
+        .nexus-header h6 { margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+        .status-bullet { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; }
+        .bullet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+        .bullet-dot.error { background: var(--error); }
+        .integration-log { font-family: 'Courier New', monospace; font-size: 11px; background: var(--surface-container-highest); padding: var(--space-3); border-radius: var(--round-sm); height: 150px; overflow-y: auto; color: var(--on-surface-variant); }
+        .log-entry { margin-bottom: 4px; display: flex; gap: 8px; }
+        .log-time { color: var(--primary); opacity: 0.7; }
+    </style>
+</head>
+<body class="surface">
+
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-title">
+                    <h4>Admin System Nexus</h4>
+                    <p class="text-secondary">Enterprise Governance & Connectivity Monitoring</p>
+                </div>
+            </header>
+
+            <div class="admin-grid">
+                <!-- 1. System Pulse -->
+                <div class="nexus-card">
+                    <div class="nexus-header">
+                        <span class="material-symbols-rounded">monitor_heart</span>
+                        <h6>System Pulse</h6>
+                    </div>
+                    <div class="status-bullet">
+                        <div class="bullet-dot"></div>
+                        <span>Network Connectivity: <strong id="net-status">ONLINE</strong></span>
+                    </div>
+                    <div class="status-bullet">
+                        <div class="bullet-dot"></div>
+                        <span>Database Node: <strong>ACTIVE</strong></span>
+                    </div>
+                    <div class="status-bullet">
+                        <div class="bullet-dot"></div>
+                        <span>Sync Engine: <strong>IDLE</strong></span>
+                    </div>
+                </div>
+
+                <!-- 2. Integration Status -->
+                <div class="nexus-card">
+                    <div class="nexus-header">
+                        <span class="material-symbols-rounded">hub</span>
+                        <h6>Integration Bridges</h6>
+                    </div>
+                    <div class="status-bullet">
+                        <div class="bullet-dot"></div>
+                        <span>Shopify Bridge: <strong>SYNCED</strong></span>
+                    </div>
+                    <div class="status-bullet">
+                        <div class="bullet-dot"></div>
+                        <span>Accounting Link: <strong>SECURE</strong></span>
+                    </div>
+                    <div class="status-bullet">
+                        <div class="bullet-dot error"></div>
+                        <span>Comms Engine: <strong style="color:var(--error);">FAILOVER</strong></span>
+                    </div>
+                </div>
+
+                <!-- 3. Real-Time Security Logs -->
+                <div class="nexus-card" style="grid-column: span 2;">
+                    <div class="nexus-header">
+                        <span class="material-symbols-rounded">terminal</span>
+                        <h6>Integration Activity Logs</h6>
+                    </div>
+                    <div class="integration-log" id="admin-log">
+                        <div class="log-entry"><span class="log-time">[14:22:01]</span> <span class="log-msg">AUTH: User "Admin@Bonnie" logged in successfully.</span></div>
+                        <div class="log-entry"><span class="log-time">[14:23:45]</span> <span class="log-msg">SYNC: POS transaction batch TXN-8829 dispatched to accounting.</span></div>
+                        <div class="log-entry"><span class="log-time">[14:25:12]</span> <span class="log-msg">E-COMM: Shopify inventory reconciliation complete. 2 items updated.</span></div>
+                        <div class="log-entry"><span class="log-time">[14:27:33]</span> <span class="log-msg">SYS: Connectivity monitor triggered 'Offline-Mode' event. Check failover logic.</span></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../../data/store.js"></script>
+    <script src="../../../renderer/nav.js"></script>
+    <script src="../../../window-manager/ui.js"></script>
+    <script src="../../../platform/connectivity.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNav('admin-dash');
+            
+            // Real-time connectivity hook
+            window.addEventListener('connectivityChanged', (e) => {
+                const statusText = document.getElementById('net-status');
+                const log = document.getElementById('admin-log');
+                const isOnline = e.detail.online;
+                
+                statusText.textContent = isOnline ? 'ONLINE' : 'OFFLINE';
+                statusText.style.color = isOnline ? 'var(--success)' : 'var(--error)';
+                
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> <span class="log-msg">SYS: Connection ${isOnline ? 'RESTORED' : 'LOST'}. Updating Nexus protocols.</span>`;
+                log.prepend(entry);
+            });
+        });
+    </script>
+</body>
+</html>

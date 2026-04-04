@@ -1,0 +1,30 @@
+/* ============================================================
+   region.css — Region & Currency Panel Styles
+   ============================================================ */
+
+.region-preview-card {
+  background: var(--surface-container-highest);
+  border-radius: var(--round-md);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.region-preview-label {
+  font-size: var(--text-label-sm);
+  color: var(--on-surface-variant);
+  margin-bottom: 2px;
+}
+
+.region-preview-currency {
+  font-size: var(--text-title-md);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.region-preview-example {
+  font-size: var(--text-body-sm);
+  color: var(--on-surface-variant);
+}

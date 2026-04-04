@@ -1,0 +1,70 @@
+/* ============================================================
+   suppliers.css — Supplier Management Feature Styles
+   ============================================================ */
+
+/* ── KPI Row ── */
+.suppliers-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+/* ── Supplier Table ── */
+.supplier-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--tertiary), color-mix(in srgb, var(--tertiary) 70%, black));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--text-label-md);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.supplier-name-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ── Status Badges ── */
+.badge-active   { background: color-mix(in srgb, #0a9396 15%, transparent); color: #0a7a7e; }
+.badge-pending  { background: color-mix(in srgb, #f4a261 15%, transparent); color: #c97c3a; }
+.badge-inactive { background: color-mix(in srgb, #ba1a1a 15%, transparent); color: #ba1a1a; }
+
+/* ── Supplier Detail Modal ── */
+.supplier-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.supplier-modal-overlay.open { display: flex; }
+
+.supplier-modal {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-6);
+  width: min(580px, 92vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-3);
+  animation: fade-in-up 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.supplier-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}

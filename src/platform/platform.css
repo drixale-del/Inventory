@@ -1,0 +1,29 @@
+/* ============================================================
+   PRECISION POS — PLATFORM SPECIFIC OVERRIDES
+   ============================================================ */
+
+/* ── macOS Adapters ── */
+/* On macOS, the titlebar uses "hiddenInset" which leaves a space on the left 
+   for the native Apple red/yellow/green traffic lights. We need to push our 
+   own UI out of the way and hide our fake Windows-style buttons. */
+
+body.os-darwin .titlebar-controls {
+  /* Hide the custom Windows hover buttons */
+  display: none !important;
+}
+
+body.os-darwin .titlebar-brand {
+  /* Push the inventory logo inward to make room for Apple Traffic Lights */
+  margin-left: 70px;
+}
+
+body.os-darwin .titlebar {
+  /* Adjust drag region so the whole top bar behaves like a native Mac window */
+  -webkit-app-region: drag;
+}
+
+/* ── Linux Adapters ── */
+/* Linux environments vary drastically (Gnome, KDE, XFCE). 
+   Generally, borderless windows on Linux behave smoothly acting like Windows 10/11.
+   We leave the Windows-style top-right buttons visible here. */
+/* Linux configuration reserved for future use. */

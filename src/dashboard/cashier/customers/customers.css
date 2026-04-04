@@ -1,0 +1,88 @@
+/* ============================================================
+   customers.css — Customer Management Feature Styles
+   ============================================================ */
+
+/* ── KPI Row ── */
+.customers-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+/* ── Customer Table ── */
+.customer-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary, #0a9396));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--text-label-md);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.customer-name-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.loyalty-stars {
+  color: #f4a261;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* ── Customer Detail Modal ── */
+.customer-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.customer-modal-overlay.open { display: flex; }
+
+.customer-modal {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-6);
+  width: min(560px, 92vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-3);
+  animation: fade-in-up 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.customer-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+/* ── Loyalty Tier Badges ── */
+.tier-bronze  { background: color-mix(in srgb, #cd7f32 18%, transparent); color: #a0522d; }
+.tier-silver  { background: color-mix(in srgb, #a8a9ad 18%, transparent); color: #6b6c6e; }
+.tier-gold    { background: color-mix(in srgb, #ffd700 18%, transparent); color: #b8860b; }
+.tier-platinum{ background: color-mix(in srgb, #5f9ea0 18%, transparent); color: #2e6b6e; }
+
+/* ── Purchase History in Modal ── */
+.purchase-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--surface-container-high);
+  font-size: var(--text-body-sm);
+}
+.purchase-history-item:last-child { border-bottom: none; }

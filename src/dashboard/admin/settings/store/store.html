@@ -1,0 +1,34 @@
+<!-- Store Info Panel -->
+<div class="settings-panel-inner">
+  <div class="card-title">Store Information</div>
+  <div class="input-group">
+    <label class="input-label">Store Name</label>
+    <input class="input-field" id="s-store-name" type="text" value="Precision Architect Main Warehouse" />
+  </div>
+  <div class="form-row">
+    <div class="input-group">
+      <label class="input-label">Store ID</label>
+      <input class="input-field" id="s-store-id" type="text" value="PREC-WH-001" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">Manager</label>
+      <input class="input-field" id="s-manager" type="text" value="Alex Sterling" />
+    </div>
+  </div>
+  <div class="input-group">
+    <label class="input-label">Address</label>
+    <input class="input-field" id="s-address" type="text" value="123 Warehouse Row, Industrial District" />
+  </div>
+  <div class="input-group">
+    <label class="input-label">Phone</label>
+    <input class="input-field" id="s-phone" type="text" value="+1 555-0100" />
+  </div>
+  <div class="input-group">
+    <label class="input-label">Email</label>
+    <input class="input-field" id="s-email" type="email" value="admin@precisionpos.com" />
+  </div>
+  <button class="btn btn-primary" style="align-self:flex-start;" onclick="StoreSettings.save()">
+    <span class="material-symbols-rounded">save</span> Save Changes
+  </button>
+  <span id="store-status" class="region-status-msg" style="display:none;"></span>
+</div>

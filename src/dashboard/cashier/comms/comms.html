@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Precision POS — Automation & Comms</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <style>
+    .automation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
+    .rule-card { background: var(--surface-container-low); padding: var(--space-5); border-radius: var(--round-lg); border: 1px solid var(--outline-variant); }
+    .rule-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3); }
+    .rule-tag { font-size: 10px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: var(--primary-container); color: var(--on-primary-container); font-weight: 700; }
+
+    .log-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--round-md); overflow: hidden; }
+    .log-table th { text-align: left; padding: var(--space-3); background: var(--surface-container-high); color: var(--on-surface-variant); font-size: 11px; }
+    .log-table td { padding: var(--space-3); border-bottom: 1px solid var(--outline-variant); font-size: 13px; color: var(--on-surface); }
+    .status-sent { color: #4caf50; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="titlebar">
+    <div class="titlebar-brand"><span class="material-symbols-rounded filled">inventory_2</span> Precision POS</div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar"><img src="../../../assets/Public/Images/logo.png" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="sidebar-user-info"><div class="sidebar-user-name">Precision POS</div><div class="sidebar-user-role">Communications Hub</div></div>
+      </div>
+      <nav id="sidebar-nav"></nav>
+    </aside>
+
+    <main class="page-content">
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Automation & Omnichannel Comms</h1>
+          <p class="page-subtitle">Configure triggers for automated invoice delivery, restock alerts, and order confirmations.</p>
+        </div>
+        <button class="btn btn-primary" onclick="alert('Rule Editor Coming Soon')">
+          <span class="material-symbols-rounded">add</span> Create Automation
+        </button>
+      </div>
+
+      <div class="automation-grid fade-in-up">
+        <div class="rule-card">
+          <div class="rule-header">
+            <span class="rule-tag">Trigger: POS Sale</span>
+            <div class="status-sync" style="color:#4caf50;"><span class="material-symbols-rounded" style="font-size:16px;">check_circle</span> Active</div>
+          </div>
+          <div style="font-weight:700; margin-bottom:4px;">Auto-Email Digital Invoice</div>
+          <p style="font-size:12px; color:var(--on-surface-variant);">Sends a professional PDF receipt to the customer's primary email address immediately after checkout.</p>
+        </div>
+        
+        <div class="rule-card">
+          <div class="rule-header">
+            <span class="rule-tag">Trigger: Stock Low</span>
+            <div class="status-sync" style="color:#4caf50;"><span class="material-symbols-rounded" style="font-size:16px;">check_circle</span> Active</div>
+          </div>
+          <div style="font-weight:700; margin-bottom:4px;">SMS Restock Notification</div>
+          <p style="font-size:12px; color:var(--on-surface-variant);">Notifies the Warehouse Manager via SMS when a Core product drops below safety threshold.</p>
+        </div>
+      </div>
+
+      <div class="card fade-in-up">
+        <div class="card-title">Automation & Delivery Logs</div>
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th>TIMESTAMP</th>
+              <th>CHANNEL</th>
+              <th>RECIPIENT</th>
+              <th>SUBJECT / TRIGGER</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="log-body">
+            <tr>
+              <td>2026-04-01 10:04</td>
+              <td><span class="material-symbols-rounded" style="font-size:16px;color:var(--primary);">mail</span> Email</td>
+              <td>customer@example.com</td>
+              <td>Invoice for TXN-008924</td>
+              <td><div class="status-sent"><span class="material-symbols-rounded" style="font-size:14px;">done_all</span> Sent</div></td>
+            </tr>
+            <tr>
+              <td>2026-04-01 09:32</td>
+              <td><span class="material-symbols-rounded" style="font-size:16px;color:#2196f3;">sms</span> SMS</td>
+              <td>+1 555-0922</td>
+              <td>Low Stock: Titanium Drill Bits</td>
+              <td><div class="status-sent"><span class="material-symbols-rounded" style="font-size:14px;">done_all</span> Sent</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../../data/store.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTitlebar();
+    initNav('comms');
+  });
+</script>
+<script src="../../../platform/platform.js"></script>
+</body>
+</html>

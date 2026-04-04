@@ -1,0 +1,85 @@
+/* smart-notifications.css — Global Hub Styles */
+
+.smart-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.hub-widget {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--round-2xl);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  min-height: 240px;
+}
+
+.hub-widget:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--primary-fixed);
+}
+
+.hub-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  border-radius: var(--round-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hub-icon .material-symbols-rounded { font-size: 28px; }
+
+.hub-content h3 {
+  font-family: var(--font-headline);
+  font-size: var(--text-title-lg);
+  font-weight: 800;
+  color: var(--on-surface);
+  margin-bottom: var(--space-2);
+}
+
+.hub-content p {
+  font-size: var(--text-body-md);
+  color: var(--on-surface-variant);
+  line-height: 1.6;
+}
+
+.hub-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  color: var(--primary);
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  font-size: var(--text-label-sm);
+  letter-spacing: 0.1em;
+}
+
+.hub-badge {
+  background: var(--error);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: var(--round-full);
+  font-size: 10px;
+  margin-left: auto;
+}
+
+@media (max-width: 900px) {
+  .smart-hub-grid { grid-template-columns: 1fr; }
+}

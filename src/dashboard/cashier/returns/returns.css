@@ -1,0 +1,114 @@
+/* ============================================================
+   returns.css — Returns & Refunds Feature Styles
+   ============================================================ */
+
+/* ── KPI Row ── */
+.returns-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+/* ── Status Badges ── */
+.badge-refunded   { background: color-mix(in srgb, #0a9396 15%, transparent); color: #0a7a7e; }
+.badge-exchanged  { background: color-mix(in srgb, #f4a261 15%, transparent); color: #c97c3a; }
+.badge-pending    { background: color-mix(in srgb, #e9c46a 15%, transparent); color: #b49520; }
+.badge-rejected   { background: color-mix(in srgb, #ba1a1a 15%, transparent); color: #ba1a1a; }
+
+/* ── Returns Table ── */
+.return-reason-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-container-high);
+  border-radius: var(--round-sm);
+  padding: 2px 8px;
+  font-size: var(--text-label-sm);
+  color: var(--on-surface-variant);
+}
+
+/* ── Modal ── */
+.return-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.return-modal-overlay.open { display: flex; }
+
+.return-modal {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-6);
+  width: min(580px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-3);
+  animation: fade-in-up 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.return-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── Timeline (status history) ── */
+.return-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--surface-container-high);
+  margin-top: var(--space-2);
+}
+
+.return-timeline-item {
+  position: relative;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+  font-size: var(--text-body-sm);
+  color: var(--on-surface-variant);
+}
+
+.return-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* ── Summary strip at top of table ── */
+.returns-summary-strip {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-container-low);
+  border-radius: var(--round-md);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.returns-summary-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body-sm);
+  color: var(--on-surface-variant);
+}
+
+.returns-summary-item strong {
+  color: var(--on-surface);
+  font-weight: 700;
+}

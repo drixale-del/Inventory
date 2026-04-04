@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Automations</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="automation.css" />
+  <!-- Scanner logic -->
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
+        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="automation-header fade-in-up">
+        <div>
+          <h1 class="page-title">Automated Reports</h1>
+          <p class="page-subtitle">Schedule sales & inventory reports to be sent via Email or SMS automatically.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);">
+          <button class="btn btn-secondary" onclick="runMockTrigger()">
+            <span class="material-symbols-rounded">bolt</span> Test Trigger
+          </button>
+          <button class="btn btn-primary" onclick="openAddAutoModal()">
+            <span class="material-symbols-rounded">add_task</span> Schedule Report
+          </button>
+        </div>
+      </div>
+
+      <!-- RULES LIST -->
+      <div id="rules-container"></div>
+
+    </main>
+  </div>
+</div>
+
+<!-- AUTO MODAL -->
+<div class="automation-modal-overlay" id="automation-modal">
+  <div class="automation-modal">
+    <div class="rule-header" style="border:none;padding:0;">
+      <div class="card-title" id="auto-modal-title" style="margin:0;">Create Scheduled Report</div>
+      <button class="btn btn-secondary btn-icon btn-sm" onclick="closeAutoModal()">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+    
+    <div class="input-group">
+      <label class="input-label">Rule Name *</label>
+      <input class="input-field" id="am-name" type="text" placeholder="e.g. Daily Branch Sales" />
+    </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Report Type</label>
+        <select class="input-field" id="am-type">
+          <option value="sales">📊 Sales & Revenue (P&L)</option>
+          <option value="inventory">📦 Inventory Levels & Low Stock</option>
+          <option value="returns">🔄 Returns & Refunds</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Frequency</label>
+        <select class="input-field" id="am-freq">
+          <option value="daily">📅 Daily (End of Day)</option>
+          <option value="weekly">📆 Weekly (Sunday Night)</option>
+          <option value="monthly">🗓 Monthly (1st of Month)</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="input-group">
+      <label class="input-label">Delivery Channels</label>
+      <div class="channel-selector">
+        <button class="channel-btn" data-chan="email" onclick="toggleChannel('email')">
+          <span class="material-symbols-rounded">mail</span> Email
+        </button>
+        <button class="channel-btn" data-chan="sms" onclick="toggleChannel('sms')">
+          <span class="material-symbols-rounded">sms</span> SMS
+        </button>
+        <button class="channel-btn" data-chan="notification" onclick="toggleChannel('notification')">
+          <span class="material-symbols-rounded">notifications</span> App Notification
+        </button>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Recipients (comma separated)</label>
+      <input class="input-field" id="am-rcpt" type="text" placeholder="e.g. manager@store.com, 555-1234" />
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Status</label>
+      <select class="input-field" id="am-status">
+        <option value="Active">🟢 Active</option>
+        <option value="Paused">⏸ Paused</option>
+      </select>
+    </div>
+    
+    <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-2);">
+      <button class="btn btn-secondary" onclick="closeAutoModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRule()">
+        <span class="material-symbols-rounded">save</span> Save Schedule
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="../../../data/store.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="../outlets/outlets.js"></script>
+<script src="../scanner/scanner.js"></script>
+<script src="automation.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../chatbot/chatbot.js"></script> 
+<script src="../exporter/exporter.js"></script>
+<script src="../alerts/alerts.js"></script>
+</body>
+</html>

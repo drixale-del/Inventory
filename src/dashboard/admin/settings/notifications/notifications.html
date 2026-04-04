@@ -1,0 +1,46 @@
+<!-- Notifications Settings Panel -->
+<div class="settings-panel-inner">
+  <div class="card-title">Notification Preferences</div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Low Stock Alerts</div>
+      <div class="setting-desc">Notify when a product's stock falls below the threshold</div>
+    </div>
+    <button class="toggle" id="toggle-low-stock" onclick="NotifSettings.toggle('lowStock', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Daily Sales Summary</div>
+      <div class="setting-desc">Receive an end-of-day performance digest</div>
+    </div>
+    <button class="toggle" id="toggle-daily-summary" onclick="NotifSettings.toggle('dailySummary', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">New Supplier Orders</div>
+      <div class="setting-desc">Get notified when a supplier order is placed</div>
+    </div>
+    <button class="toggle" id="toggle-supplier-orders" onclick="NotifSettings.toggle('supplierOrders', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Pending Approvals</div>
+      <div class="setting-desc">Alert when a new item requires approval</div>
+    </div>
+    <button class="toggle" id="toggle-approvals" onclick="NotifSettings.toggle('approvals', this)"></button>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label">Low Stock Threshold (units)</label>
+    <input class="input-field" id="n-threshold" type="number" min="1" value="10" />
+  </div>
+
+  <button class="btn btn-primary" style="align-self:flex-start;" onclick="NotifSettings.save()">
+    <span class="material-symbols-rounded">save</span> Save Notification Settings
+  </button>
+  <span id="notif-status" class="region-status-msg" style="display:none;"></span>
+</div>

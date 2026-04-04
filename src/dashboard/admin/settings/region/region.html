@@ -1,0 +1,39 @@
+<!-- Region & Currency Panel -->
+<div class="settings-panel-inner">
+  <div class="card-title">Region &amp; Currency</div>
+  <p style="margin-bottom:var(--space-5); color:var(--on-surface-variant); font-size:var(--text-body-sm);">
+    Select your region to set the correct currency for pricing, receipts, and reports.
+  </p>
+
+  <div class="form-row">
+    <div class="input-group">
+      <label class="input-label">Continent</label>
+      <select class="input-field" id="region-continent">
+        <option value="">— Select Continent —</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Country</label>
+      <select class="input-field" id="region-country">
+        <option value="">— Select Country —</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Currency Preview Card -->
+  <div class="region-preview-card">
+    <span class="material-symbols-rounded" style="font-size:32px; color:var(--primary);">payments</span>
+    <div>
+      <div class="region-preview-label">Active Currency</div>
+      <div class="region-preview-currency" id="region-currency-preview">—</div>
+      <div class="region-preview-example" id="region-currency-example"></div>
+    </div>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:var(--space-3);">
+    <button class="btn btn-primary" id="region-save-btn">
+      <span class="material-symbols-rounded">save</span> Save Region
+    </button>
+    <span id="region-status" class="region-status-msg" style="display:none;"></span>
+  </div>
+</div>

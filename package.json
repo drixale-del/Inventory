@@ -1,0 +1,57 @@
+{
+  "name": "precision-pos-inventory",
+  "version": "1.0.0",
+  "description": "Precision Architect — Desktop POS & Inventory Management System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --inspect",
+    "build:mac": "electron-builder --mac -c.directories.output=installers/macos",
+    "build:win": "electron-builder --win -c.directories.output=installers/windows",
+    "build:linux": "electron-builder --linux -c.directories.output=installers/linux"
+  },
+  "keywords": [
+    "pos",
+    "inventory",
+    "electron"
+  ],
+  "author": "Bonnie",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^29.4.6",
+    "electron-builder": "^26.8.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1"
+  },
+  "build": {
+    "appId": "com.precision.pos",
+    "productName": "Precision POS",
+    "directories": {
+      "output": "dist"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/assets/icon.png"
+    },
+    "mac": {
+      "target": [
+        "pkg"
+      ],
+      "icon": "src/assets/icon.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "src/assets/icon.png"
+    }
+  }
+}

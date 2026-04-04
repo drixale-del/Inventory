@@ -1,0 +1,108 @@
+/* ============================================================
+   lifecycle.css — Product Age and Dead Stock UI
+   ============================================================ */
+
+.lifecycle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.lifecycle-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.lifecycle-kpi {
+  background: var(--surface-container);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--round-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.lc-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--round-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-1);
+}
+.lc-new { background: #e3f2fd; color: #1565c0; }
+.lc-core { background: #e8f5e9; color: #2e7d32; }
+.lc-aging { background: #fff3e0; color: #ef6c00; }
+.lc-dead { background: #ffebee; color: #c62828; }
+
+.lc-title {
+  font-size: var(--text-label-sm);
+  color: var(--on-surface-variant);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.lc-count {
+  font-family: var(--font-headline);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+/* Phase Outline Matrix */
+.matrix-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.matrix-list {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.matrix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--surface-container-high);
+}
+.matrix-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--surface-container-lowest);
+}
+.matrix-list-item:last-child {
+  border-bottom: none;
+}
+.matrix-prod-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.matrix-prod-name {
+  font-weight: 600;
+  color: var(--on-surface);
+}
+.matrix-prod-sku {
+  font-size: var(--text-label-sm);
+  color: var(--on-surface-variant);
+}
+.matrix-prod-age {
+  font-family: monospace;
+  font-size: 13px;
+  background: var(--surface-container-high);
+  padding: 2px 6px;
+  border-radius: var(--round-sm);
+  color: var(--on-surface-variant);
+}

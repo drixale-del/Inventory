@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Precision POS — E-commerce Sync</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <style>
+    .channel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6); margin-bottom: var(--space-8); }
+    .channel-card { background: var(--surface-container-low); padding: var(--space-6); border-radius: var(--round-lg); border: 2px solid var(--outline-variant); position: relative; }
+    .channel-card.active { border-color: #2196f3; }
+    .channel-logo { width: 40px; height: 40px; margin-bottom: var(--space-4); opacity: 0.8; }
+    .channel-info { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+    .sync-status { display: flex; align-items: center; gap: 8px; font-size: var(--text-label-sm); font-weight: 600; color: #4caf50; }
+    .sync-timestamp { font-size: 11px; color: var(--on-surface-variant); opacity: 0.7; }
+
+    .inventory-list { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--round-md); overflow: hidden; margin-top: var(--space-6); }
+    .inventory-list th { text-align: left; padding: var(--space-3); background: var(--surface-container-high); color: var(--on-surface-variant); font-size: 10px; text-transform: uppercase; }
+    .inventory-list td { padding: var(--space-3); border-bottom: 1px solid var(--outline-variant); font-size: 12px; color: var(--on-surface); }
+    .stock-tag { padding: 2px 8px; border-radius: 4px; font-weight: 700; background: var(--surface-container-high); vertical-align: middle; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="titlebar">
+    <div class="titlebar-brand"><span class="material-symbols-rounded filled">inventory_2</span> Precision POS</div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar"><img src="../../../assets/Public/Images/logo.png" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="sidebar-user-info"><div class="sidebar-user-name">Precision POS</div><div class="sidebar-user-role">Inventory Integrations</div></div>
+      </div>
+      <nav id="sidebar-nav"></nav>
+    </aside>
+
+    <main class="page-content">
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">E-commerce Inventory Sync</h1>
+          <p class="page-subtitle">Real-time stock synchronization across external Shopify and WooCommerce instances.</p>
+        </div>
+        <button class="btn btn-primary" onclick="syncAll()">
+          <span class="material-symbols-rounded">sync</span> Sync Now
+        </button>
+      </div>
+
+      <div class="channel-grid fade-in-up">
+        <!-- Shopify -->
+        <div class="channel-card active">
+          <div class="channel-info">
+            <svg class="channel-logo" viewBox="0 0 448 512" fill="#95BF47"><path d="M280.9 292.9c16.3 33.3 22.8 68.7 18.5 106.7c-4.4 39.1-23.7 74.4-53.7 99.8l-1.3-.9c-30.1-25.4-49.4-60.7-53.8-99.8c-4.3-38.1 2.3-73.4 18.5-106.7c31.1-63.5 102.3-101.4 141.2-101.4l1.3.1c-15.6 23.4-31.1 53-40.4 102z"/></svg>
+            <div>
+              <div style="font-weight:700;">Shopify HQ</div>
+              <div class="sync-timestamp" id="shopify-sync">Last synced: Just now</div>
+            </div>
+            <div class="sync-status">Connected</div>
+          </div>
+          <button class="btn btn-secondary btn-icon" style="width:100%;" onclick="alert('Configure Shopify API Key')">
+            <span class="material-symbols-rounded">settings</span> Configure API
+          </button>
+        </div>
+
+        <!-- WooCommerce -->
+        <div class="channel-card">
+          <div class="channel-info">
+             <svg class="channel-logo" viewBox="0 0 448 512" fill="#96588A"><path d="M432.2 0H15.8C7.1 0 0 7.1 0 15.8v480.3C0 504.9 7.1 512 15.8 512h416.3c8.7 0 15.8-7.1 15.8-15.8V15.8C448 7.1 440.9 0 432.2 0z"/></svg>
+            <div>
+              <div style="font-weight:700;">WooCommerce Global</div>
+              <div class="sync-timestamp">Status: Disconnected</div>
+            </div>
+            <div class="sync-status" style="color:var(--on-border-variant);">Offline</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;" onclick="alert('Attempting OAuth Connection...')">
+            <span class="material-symbols-rounded">link</span> Connect Channel
+          </button>
+        </div>
+      </div>
+
+      <div class="card fade-in-up">
+        <div class="card-title">Warehouse Stock Mapping</div>
+        <table class="inventory-list">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>PRODUCT NAME</th>
+              <th>WAREHOUSE STOCK</th>
+              <th>ONLINE STATUS</th>
+              <th>SYNC ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="inventory-body"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../../data/store.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTitlebar();
+    initNav('ecommerce');
+    renderInventory();
+  });
+
+  function renderInventory() {
+    const products = Store.products;
+    const body = document.getElementById('inventory-body');
+    body.innerHTML = products.map(p => `
+      <tr>
+        <td style="font-family:monospace;font-weight:600;">${p.sku}</td>
+        <td style="font-weight:600;">${p.name}</td>
+        <td><span class="stock-tag">${p.stock}</span></td>
+        <td>
+          <span class="badge" style="background:#e3f2fd;color:#2196f3;font-size:10px;">Synced to Shopify</span>
+        </td>
+        <td>
+           <button class="btn btn-secondary btn-icon" onclick="pushOne('${p.sku}')" title="Manual Push">
+             <span class="material-symbols-rounded" style="font-size:16px;">cloud_upload</span>
+           </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function pushOne(sku) {
+    alert(`Manually pushing SKU ${sku} to Shopify Inventory API...`);
+  }
+
+  function syncAll() {
+    const el = document.getElementById('shopify-sync');
+    el.textContent = 'Syncing...';
+    setTimeout(() => {
+      el.textContent = 'Last synced: Just now';
+      alert('Global Catalog Synchronization Successful (12 SKUs Updated)');
+    }, 1500);
+  }
+</script>
+<script src="../../../platform/platform.js"></script>
+</body>
+</html>

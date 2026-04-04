@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Product Lifecycle</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="lifecycle.css" />
+  <!-- Universal Addons -->
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
+        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="lifecycle-header fade-in-up">
+        <div>
+          <h1 class="page-title">Product Lifecycle Matrix</h1>
+          <p class="page-subtitle">Track product aging and identify slow-moving stock occupying critical capital space.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);">
+          <!-- Note: I am leveraging the universal exporter hook automatically -->
+          <button class="btn btn-secondary" onclick="Exporter.show('Lifecycle Tracker')">
+            <span class="material-symbols-rounded">download</span> Export Matrix
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI SCALES -->
+      <div class="lifecycle-grid fade-in-up">
+        <div class="lifecycle-kpi">
+          <div class="lc-icon lc-new"><span class="material-symbols-rounded">fiber_new</span></div>
+          <div class="lc-title">New Arrivals (< 30 Days)</div>
+          <div class="lc-count" id="lc-kpi-new">—</div>
+        </div>
+        <div class="lifecycle-kpi">
+          <div class="lc-icon lc-core"><span class="material-symbols-rounded">star</span></div>
+          <div class="lc-title">Core Products</div>
+          <div class="lc-count" id="lc-kpi-core">—</div>
+        </div>
+        <div class="lifecycle-kpi">
+          <div class="lc-icon lc-aging"><span class="material-symbols-rounded">hourglass_bottom</span></div>
+          <div class="lc-title">Aging Phase-Out</div>
+          <div class="lc-count" id="lc-kpi-aging">—</div>
+        </div>
+        <div class="lifecycle-kpi">
+          <div class="lc-icon lc-dead"><span class="material-symbols-rounded">skull</span></div>
+          <div class="lc-title">Dead Stock (> 120 Days / Zero Sales)</div>
+          <div class="lc-count" id="lc-kpi-dead">—</div>
+        </div>
+      </div>
+
+      <!-- VISUAL ANALYTICS -->
+      <div class="lifecycle-analytics fade-in-up" style="display:grid; grid-template-columns: 1fr 2fr; gap:var(--space-6); margin-bottom:var(--space-8); height:320px;">
+        <div class="card" style="padding:var(--space-4); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div style="font-weight:600; margin-bottom:var(--space-4); color:var(--on-surface);">Status Distribution</div>
+          <div style="flex:1; width:100%; position:relative;">
+            <canvas id="lc-chart-dist"></canvas>
+          </div>
+        </div>
+        <div class="card" style="padding:var(--space-4);">
+          <div style="font-weight:600; margin-bottom:var(--space-4); color:var(--on-surface);">Catalog Health Trend</div>
+          <p style="font-size:var(--text-body-sm); color:var(--on-surface-variant); margin-bottom:var(--space-4);">
+            Estimated revenue locked in "Dead Stock" candidates: <strong id="lc-dead-val" style="color:#c62828;">$0.00</strong>
+          </p>
+          <div style="height:180px; position:relative;">
+             <canvas id="lc-chart-timeline"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- MATRICES -->
+      <div class="matrix-container">
+        
+        <!-- DEAD STOCK -->
+        <div class="matrix-list fade-in-up" style="border-top: 4px solid #c62828;">
+          <div class="matrix-header">
+            <div class="card-title" style="margin:0;">Dead Stock Candidates</div>
+            <span class="badge" style="background:#ffebee;color:#c62828;">Critical</span>
+          </div>
+          <p style="font-size:var(--text-body-sm);color:var(--on-surface-variant);margin-bottom:var(--space-4);">
+            These items have occupied warehouse space for over 120 days but have zero generated sales.
+          </p>
+          <div id="lc-list-dead"></div>
+        </div>
+
+        <!-- AGING STOCK -->
+        <div class="matrix-list fade-in-up" style="border-top: 4px solid #ef6c00;">
+          <div class="matrix-header">
+            <div class="card-title" style="margin:0;">Aging Inventory</div>
+            <span class="badge" style="background:#fff3e0;color:#e65100;">Warning</span>
+          </div>
+          <p style="font-size:var(--text-body-sm);color:var(--on-surface-variant);margin-bottom:var(--space-4);">
+            Items older than 90 days with very poor sales velocity. Consider sending to promo bundles.
+          </p>
+          <div id="lc-list-aging"></div>
+        </div>
+
+        <!-- NEW ARRIVALS (Spanning below) -->
+        <div class="matrix-list fade-in-up" style="grid-column: 1 / -1; border-top: 4px solid #1565c0;">
+          <div class="matrix-header">
+            <div class="card-title" style="margin:0;">Recent Additions / Initial Testing</div>
+            <span class="badge" style="background:#e3f2fd;color:#0d47a1;">Info</span>
+          </div>
+          <div id="lc-list-new" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);"></div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ANALYSIS MODAL -->
+<div class="modal-overlay" id="lc-modal">
+  <div class="modal-container" style="max-width: 500px;">
+    <div class="modal-header">
+      <h2 class="modal-title" id="lc-modal-title">Product Lifecycle Analysis</h2>
+      <button class="btn-close-modal" onclick="LifecycleEngine.closeModal()"><span class="material-symbols-rounded">close</span></button>
+    </div>
+    <div class="modal-body" id="lc-modal-body">
+      <!-- Dynamically filled -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="LifecycleEngine.closeModal()">Close</button>
+      <button class="btn btn-primary" onclick="alert('Routing to Inventory for SKU modification...')">Edit Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<!-- Dependencies -->
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../data/store.js"></script>
+<script src="../suppliers/suppliers.js"></script>
+<script src="../customers/customers.js"></script>
+<!-- Exporter Engine -->
+<script src="../exporter/exporter.js"></script>
+
+<!-- Global Modules -->
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+
+<!-- Addons -->
+<script src="../outlets/outlets.js"></script>
+<script src="../scanner/scanner.js"></script>
+<script src="../alerts/alerts.js"></script>
+
+<!-- Charting -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Lifecycle engine -->
+<script src="lifecycle.js"></script>
+
+<!-- Initialize Main Nav Active State -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTitlebar();
+    initNav('lifecycle');
+  });
+</script>
+
+<script src="../../../platform/platform.js"></script>
+<script src="../chatbot/chatbot.js"></script>
+</body>
+</html>

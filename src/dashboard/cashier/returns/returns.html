@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Returns &amp; Refunds</title>
+  <link rel="stylesheet" href="../../../styles/tokens.css" />
+  <link rel="stylesheet" href="../../../styles/components.css" />
+  <link rel="stylesheet" href="returns.css" />
+  <link rel="stylesheet" href="../../../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../../../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../../../assets/Public/Images/logo.png" alt="App Logo" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
+        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Returns &amp; Refunds</h1>
+          <p class="page-subtitle">Track returned items, refund status, and resolution details.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);">
+          <button class="btn btn-secondary" onclick="Exporter.show('Returns')">
+            <span class="material-symbols-rounded">download</span>Export As...</button>
+          <button class="btn btn-primary" onclick="openAddReturnModal()">
+            <span class="material-symbols-rounded">assignment_return</span> Log Return
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="returns-kpi-row">
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Total Returns</div>
+          <div class="kpi-value" id="kpi-total-returns">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">assignment_return</span> all time</div>
+        </div>
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Refund Value</div>
+          <div class="kpi-value" id="kpi-refund-value">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">payments</span> refunded</div>
+        </div>
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Pending Review</div>
+          <div class="kpi-value" id="kpi-pending-returns">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">pending</span> awaiting action</div>
+        </div>
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Total Returned Value</div>
+          <div class="kpi-value" id="kpi-return-value">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">inventory</span> incl. exchanges</div>
+        </div>
+      </div>
+
+      <!-- SUMMARY STRIP -->
+      <div class="returns-summary-strip fade-in-up" id="returns-summary-strip"></div>
+
+      <!-- CONTROLS -->
+      <div class="card fade-in-up" style="padding:var(--space-4);margin-bottom:var(--space-4);">
+        <div style="display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap;">
+          <div style="position:relative;flex:1;min-width:220px;">
+            <span class="material-symbols-rounded" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--on-surface-variant);font-size:18px;">search</span>
+            <input class="input-field" id="returns-search" placeholder="Search ID, transaction, customer, product…" style="padding-left:40px;" />
+          </div>
+          <div style="display:flex;gap:var(--space-2);">
+            <button class="chip active" onclick="filterByResolution('all', this)">All</button>
+            <button class="chip" onclick="filterByResolution('pending', this)">⏳ Pending</button>
+            <button class="chip" onclick="filterByResolution('refunded', this)">✅ Refunded</button>
+            <button class="chip" onclick="filterByResolution('exchanged', this)">🔄 Exchanged</button>
+            <button class="chip" onclick="filterByResolution('rejected', this)">❌ Rejected</button>
+          </div>
+          <span class="badge badge-neutral" id="returns-count" style="margin-left:auto;"></span>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card fade-in-up" style="overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Return ID</th>
+                <th>Transaction</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Reason</th>
+                <th class="numeric">Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="returns-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- LOG / EDIT RETURN MODAL -->
+<div class="return-modal-overlay" id="return-modal">
+  <div class="return-modal">
+
+    <div class="return-modal-header">
+      <div class="card-title" id="ret-modal-title" style="margin:0;">Log Return / Refund</div>
+      <button class="btn btn-secondary btn-icon btn-sm" onclick="closeReturnModal()">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+
+    <!-- Row 1: TXN & Customer -->
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Transaction ID</label>
+        <input class="input-field" id="rm-txn" type="text" placeholder="e.g. TXN-008923" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Customer Name</label>
+        <input class="input-field" id="rm-customer" type="text" placeholder="Walk-in Customer" />
+      </div>
+    </div>
+
+    <!-- Row 2: Product & SKU -->
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Product Name *</label>
+        <input class="input-field" id="rm-product" type="text" placeholder="e.g. Aura Beats Pro" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">SKU</label>
+        <input class="input-field" id="rm-sku" type="text" placeholder="e.g. AUD-5540-B" />
+      </div>
+    </div>
+
+    <!-- Row 3: Qty & Amount -->
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Quantity Returned</label>
+        <input class="input-field" id="rm-qty" type="number" min="1" value="1" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Return Amount</label>
+        <input class="input-field" id="rm-amount" type="number" step="0.01" placeholder="0.00" />
+      </div>
+    </div>
+
+    <!-- Row 4: Reason & Resolution -->
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Return Reason</label>
+        <select class="input-field" id="rm-reason"></select>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Resolution</label>
+        <select class="input-field" id="rm-resolution">
+          <option value="pending">⏳ Pending</option>
+          <option value="refunded">✅ Refunded</option>
+          <option value="exchanged">🔄 Exchanged</option>
+          <option value="rejected">❌ Rejected</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="input-group">
+      <label class="input-label">Notes / Comments</label>
+      <input class="input-field" id="rm-notes" type="text" placeholder="Any additional details about this return…" />
+    </div>
+
+    <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-2);">
+      <button class="btn btn-secondary" onclick="closeReturnModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReturn()">
+        <span class="material-symbols-rounded">save</span> Save Return
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../../../../data/store.js"></script>
+<script src="../../../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../../../renderer/nav.js"></script>
+<script src="../../../../../window-manager/ui.js"></script>
+<script src="returns.js"></script>
+<script src="../../../../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
+<script src="../../../outlets/outlets.js"></script>
+<script src="../scanner/scanner.js"></script>
+<script src="../../../exporter/exporter.js"></script>
+<script src="../../../alerts/alerts.js"></script>
+</body>
+</html>

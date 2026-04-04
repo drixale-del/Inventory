@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome | Precision POS</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="launcher.css">
+</head>
+<body class="launcher-theme">
+
+  <!-- ── Custom Titlebar ──────────────────────────────────────── -->
+  <header class="titlebar draggable">
+    <div class="titlebar-brand non-draggable">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      <span>Precision POS</span>
+    </div>
+    <div class="titlebar-controls non-draggable">
+      <button class="control-btn" id="btn-minimize" title="Minimize">
+        <span class="material-symbols-rounded">remove</span>
+      </button>
+      <button class="control-btn" id="btn-maximize" title="Maximize">
+        <span class="material-symbols-rounded">fullscreen</span>
+      </button>
+      <button class="control-btn close" id="btn-close" title="Close">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Main Content ─────────────────────────────────────────── -->
+  <main class="launcher-container">
+    <section class="welcome-header">
+      <div class="logo-animation">
+        <img src="../../assets/Public/Images/logo.png" alt="Precision POS Logo">
+      </div>
+      <h1>Select Your Portal</h1>
+      <p>Choose an operational hub to begin your session.</p>
+    </section>
+
+    <div class="role-grid">
+      <!-- Admin Card -->
+      <button class="role-card" onclick="selectRole('admin-dash')" id="admin-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-content">
+          <div class="role-icon-wrapper admin">
+            <span class="material-symbols-rounded filled">admin_panel_settings</span>
+          </div>
+          <h3>Admin Nexus</h3>
+          <p>Global Configuration, Store Settings, and User Management.</p>
+          <span class="entry-badge">Executive Access</span>
+        </div>
+      </button>
+
+      <!-- Manager Card -->
+      <button class="role-card" onclick="selectRole('manager-dash')" id="manager-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-content">
+          <div class="role-icon-wrapper manager">
+            <span class="material-symbols-rounded filled">analytics</span>
+          </div>
+          <h3>Manager Ops</h3>
+          <p>Inventory Control, Advanced Reporting, and Staff Oversight.</p>
+          <span class="entry-badge">Operational Access</span>
+        </div>
+      </button>
+
+      <!-- Cashier Card -->
+      <button class="role-card" onclick="selectRole('cashier-dash')" id="cashier-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-content">
+          <div class="role-icon-wrapper cashier">
+            <span class="material-symbols-rounded filled">point_of_sale</span>
+          </div>
+          <h3>Cashier Hub</h3>
+          <p>Sales, Point of Sale, and Everyday Customer Transactions.</p>
+          <span class="entry-badge">Standard Access</span>
+        </div>
+      </button>
+    </div>
+
+    <footer class="launcher-footer">
+      <p>&copy; 2026 Precision POS. Decentralized Intelligence System.</p>
+    </footer>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../../window-manager/ui.js"></script>
+  <script src="launcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard — Precision POS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="../../../styles/modern-normalize.css">
+    <link rel="stylesheet" href="../../../styles/tokens.css">
+    <link rel="stylesheet" href="../../../styles/components.css">
+    <style>
+        .manager-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6); padding: var(--space-6); }
+        .analytics-card { background: var(--surface-container-high); border-radius: var(--round-md); padding: var(--space-6); border: 1px solid var(--outline-variant); }
+        .chart-container { height: 300px; position: relative; margin-top: var(--space-4); }
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-bottom: var(--space-6); }
+        .stat-item { background: var(--surface-container-highest); padding: var(--space-4); border-radius: var(--round-sm); }
+        .stat-val { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .forecast-list { display: flex; flex-direction: column; gap: var(--space-4); }
+        .forecast-item { background: var(--surface-container-low); padding: var(--space-3); border-radius: var(--round-sm); border: 1px solid var(--outline-variant); }
+    </style>
+</head>
+<body class="surface">
+
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-title">
+                    <h4>Operations Command</h4>
+                    <p class="text-secondary">Strategic Analytics & Inventory Forecasting</p>
+                </div>
+            </header>
+
+            <div class="manager-grid">
+                <!-- 1. P&L Visualizer -->
+                <div class="analytics-card" style="grid-column: span 2;">
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="text-secondary" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Weekly Revenue</div>
+                            <div class="stat-val" id="revenue-val">$0.00</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="text-secondary" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Net Profit Margin</div>
+                            <div class="stat-val" id="profit-val">0.0%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="text-secondary" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Inventory Asset Value</div>
+                            <div class="stat-val" id="inventory-val">$0.00</div>
+                        </div>
+                    </div>
+                    <h6>Weekly Financial Performance</h6>
+                    <div class="chart-container">
+                        <canvas id="pl-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 2. Stock Velocity -->
+                <div class="analytics-card">
+                    <h6>High-Velocity Products</h6>
+                    <p class="text-secondary" style="font-size:12px; margin-bottom: var(--space-4);">Items with fastest inventory turnover rate.</p>
+                    <div class="forecast-list" id="velocity-list">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- 3. Low Stock Predication -->
+                <div class="analytics-card">
+                    <h6>Replenishment Forecast</h6>
+                    <p class="text-secondary" style="font-size:12px; margin-bottom: var(--space-4);">AI-driven stockout predictions (7-day window).</p>
+                    <div class="forecast-list" id="forecast-list">
+                         <div class="forecast-item">
+                             <div style="font-weight:600; font-size:14px;">MacBook Pro M3</div>
+                             <div class="text-secondary" style="font-size:12px;">Predicted Stockout: <strong>4 Days</strong></div>
+                         </div>
+                         <div class="forecast-item">
+                             <div style="font-weight:600; font-size:14px;">Dell UltraSharp 27"</div>
+                             <div class="text-secondary" style="font-size:12px;">Predicted Stockout: <strong>6 Days</strong></div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="../../../data/store.js"></script>
+    <script src="../../../renderer/nav.js"></script>
+    <script src="../../../window-manager/ui.js"></script>
+    <script src="../../../dashboard/admin/settings/region/currency.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNav('manager-dash');
+            
+            // 1. Update Stats from Store
+            const pnl = Store.pnl;
+            const inventory = Store.getTotalStockValue();
+            
+            document.getElementById('revenue-val').textContent = Currency?.format(pnl.revenue) || '$' + pnl.revenue.toFixed(2);
+            document.getElementById('inventory-val').textContent = Currency?.format(inventory) || '$' + inventory.toFixed(2);
+            
+            const margin = pnl.revenue > 0 ? (pnl.netProfit / pnl.revenue) * 100 : 0;
+            document.getElementById('profit-val').textContent = margin.toFixed(1) + '%';
+
+            // 2. Render P&L Chart
+            const ctx = document.getElementById('pl-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [1200, 1900, 800, 1500, 2200, 3000, 2500], // Mock historical
+                        borderColor: '#2563eb',
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true }, x: { grid: { display : false } } }
+                }
+            });
+
+            // 3. Render Velocity List
+            const vList = document.getElementById('velocity-list');
+            const topItems = Store.products.slice(0, 3);
+            vList.innerHTML = topItems.map(p => `
+                <div class="forecast-item" style="border-left: 3px solid var(--success);">
+                    <div style="font-weight:600; font-size:14px;">${p.name}</div>
+                    <div class="text-secondary" style="font-size:12px;">Daily Velocity: <strong>${(Math.random()*5 + 1).toFixed(1)} units/day</strong></div>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>

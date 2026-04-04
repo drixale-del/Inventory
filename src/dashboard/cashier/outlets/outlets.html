@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Outlets</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+          <!-- Global outlet selector will be auto-injected here by outlets.js -->
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
+        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Branch / Outlet Management</h1>
+          <p class="page-subtitle">Add and configure physical store locations across your network.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);">
+          <button class="btn btn-primary" onclick="openAddOutletModal()">
+            <span class="material-symbols-rounded">add_business</span> Add Branch
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card fade-in-up" style="overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Branch Name</th>
+                <th>Location / Address</th>
+                <th>Manager</th>
+                <th>Contact Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="outlets-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ADD / EDIT OUTLET MODAL -->
+<div class="outlet-modal-overlay" id="outlet-modal">
+  <div class="outlet-modal">
+    <div class="outlet-modal-header">
+      <div class="card-title" id="outlet-modal-title" style="margin:0;">Add Branch</div>
+      <button class="btn btn-secondary btn-icon btn-sm" onclick="closeOutletModal()">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+    
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Branch Name *</label>
+        <input class="input-field" id="om-name" type="text" placeholder="e.g. Downtown Main" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Manager Name</label>
+        <input class="input-field" id="om-manager" type="text" placeholder="e.g. Alex Sterling" />
+      </div>
+    </div>
+    
+    <div class="input-group">
+      <label class="input-label">Location / Address *</label>
+      <input class="input-field" id="om-location" type="text" placeholder="120 Market St, NY" />
+    </div>
+
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Contact Phone</label>
+        <input class="input-field" id="om-phone" type="text" placeholder="555-0001" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Status</label>
+        <select class="input-field" id="om-status">
+          <option value="Active">🟢 Active</option>
+          <option value="Inactive">🔴 Inactive</option>
+        </select>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-2);">
+      <button class="btn btn-secondary" onclick="closeOutletModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveOutlet()">
+        <span class="material-symbols-rounded">save</span> Save Branch
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<!-- Global data layer -->
+<script src="../../../data/store.js"></script>
+<!-- Exporter hook -->
+<script src="../exporter/exporter.js"></script>
+<!-- Core UI dependencies -->
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<!-- Load Outlets logic — self initializes active outlet selector in titlebars -->
+<script src="outlets.js"></script>
+<!-- Platform helpers -->
+<script src="../../../platform/platform.js"></script>
+<!-- Assistant -->
+<script src="../chatbot/chatbot.js"></script>
+<script src="../scanner/scanner.js"></script>
+<script src="../alerts/alerts.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+/* ============================================================
+   automation.css — Automated Reports UI Styles
+   ============================================================ */
+
+.automation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.rule-card {
+  background: var(--surface-container);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--round-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: all var(--transition-base);
+}
+.rule-card:hover { border-color: var(--outline-variant); }
+
+.rule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--surface-container-high);
+}
+
+.rule-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rule-frequency {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: var(--round-full);
+  font-size: var(--text-label-sm);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rule-frequency .material-symbols-rounded { font-size: 14px; }
+
+.rule-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+  font-size: var(--text-body-sm);
+}
+
+.rule-meta {
+  color: var(--on-surface-variant);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rule-meta strong {
+  color: var(--on-surface);
+  font-weight: 600;
+}
+
+/* ── Modal Forms ── */
+.automation-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.automation-modal-overlay.open { display: flex; }
+
+.automation-modal {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-6);
+  width: min(540px, 92vw);
+  box-shadow: var(--shadow-3);
+  animation: fade-in-up 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Multi-select chips for channels */
+.channel-selector { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.channel-btn {
+  border: 1px solid var(--outline-variant);
+  background: transparent;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--round-md);
+  color: var(--on-surface-variant);
+  font-size: var(--text-label-sm);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-fast);
+}
+.channel-btn.active {
+  background: var(--primary-fixed);
+  border-color: var(--primary);
+  color: var(--primary);
+}

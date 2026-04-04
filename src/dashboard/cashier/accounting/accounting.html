@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Precision POS — Accounting Sync</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <style>
+    .accounting-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-bottom: var(--space-8); }
+    .stat-card { background: var(--surface-container-low); padding: var(--space-6); border-radius: var(--round-lg); border: 1px solid var(--outline-variant); }
+    .stat-val { font-size: 32px; font-weight: 700; margin-top: var(--space-2); color: var(--on-surface); }
+    .stat-lbl { font-size: var(--text-label-md); color: var(--on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .entry-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--round-md); overflow: hidden; }
+    .entry-table th { text-align: left; padding: var(--space-4); background: var(--surface-container-high); color: var(--on-surface-variant); font-size: var(--text-label-md); }
+    .entry-table td { padding: var(--space-4); border-bottom: 1px solid var(--outline-variant); font-size: var(--text-body-md); color: var(--on-surface); }
+    
+    .status-sync { display: flex; align-items: center; gap: 8px; color: #4caf50; font-weight: 600; font-size: var(--text-label-sm); }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="titlebar">
+    <div class="titlebar-brand"><span class="material-symbols-rounded filled">inventory_2</span> Precision POS</div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar"><img src="../../../assets/Public/Images/logo.png" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="sidebar-user-info"><div class="sidebar-user-name">Precision POS</div><div class="sidebar-user-role">Accounting</div></div>
+      </div>
+      <nav id="sidebar-nav"></nav>
+    </aside>
+
+    <main class="page-content">
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Financial Sync & Accounting</h1>
+          <p class="page-subtitle">Unified ledger syncing revenue, taxes, and costs from all channel checkouts.</p>
+        </div>
+        <div class="status-sync">
+          <span class="material-symbols-rounded" style="font-size:18px;">cloud_done</span> Local Sync Active
+        </div>
+      </div>
+
+      <div class="accounting-grid fade-in-up">
+        <div class="stat-card">
+          <div class="stat-lbl">Total Revenue</div>
+          <div class="stat-val" id="acc-revenue">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Estimated Taxes (8%)</div>
+          <div class="stat-val" id="acc-taxes" style="color:var(--primary);">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Net Profit</div>
+          <div class="stat-val" id="acc-profit" style="color:#4caf50;">$0.00</div>
+        </div>
+      </div>
+
+      <div class="card fade-in-up">
+        <div class="card-title" style="margin-bottom:var(--space-4);">Journal Ledger Entries</div>
+        <table class="entry-table">
+          <thead>
+            <tr>
+              <th>TXN ID</th>
+              <th>DATE</th>
+              <th>ITEMS</th>
+              <th>TOTAL</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="ledger-body"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../data/store.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTitlebar();
+    initNav('accounting');
+    renderAccounting();
+  });
+
+  function renderAccounting() {
+    const { pnl, transactions } = Store;
+    
+    document.getElementById('acc-revenue').textContent = Currency.format(pnl.revenue);
+    document.getElementById('acc-taxes').textContent   = Currency.format(pnl.taxes);
+    document.getElementById('acc-profit').textContent  = Currency.format(pnl.netProfit);
+
+    const body = document.getElementById('ledger-body');
+    body.innerHTML = transactions.map(t => `
+      <tr>
+        <td style="font-family:monospace;font-weight:600;">${t.id}</td>
+        <td>${t.date}</td>
+        <td>${t.items} items</td>
+        <td style="font-weight:700;">${Currency.format(t.total)}</td>
+        <td><span class="badge badge-success">Synced</span></td>
+      </tr>
+    `).join('');
+  }
+</script>
+<script src="../../../platform/platform.js"></script>
+</body>
+</html>

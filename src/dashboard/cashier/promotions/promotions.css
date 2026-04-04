@@ -1,0 +1,72 @@
+/* ============================================================
+   promotions.css — Bundle & Campaign Manager
+   ============================================================ */
+
+.promo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.promo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.promo-card {
+  background: var(--surface-container);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--round-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--surface-container-highest);
+}
+
+.promo-title {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: var(--text-body-lg);
+  color: var(--on-surface);
+}
+.promo-code {
+  font-family: monospace;
+  background: var(--surface-container-highest);
+  padding: 4px 8px;
+  border-radius: var(--round-sm);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.promo-details {
+  font-size: var(--text-body-md);
+  color: var(--on-surface-variant);
+  margin-bottom: var(--space-4);
+  flex: 1;
+}
+
+.promo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+/* Modal styles for adding new */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.form-group.full { grid-column: 1 / -1; }

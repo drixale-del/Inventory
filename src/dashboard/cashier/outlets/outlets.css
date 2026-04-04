@@ -1,0 +1,48 @@
+/* ============================================================
+   outlets.css — Outlet Management UI map & table styles
+   ============================================================ */
+
+/* ── Global Header Outlet Selector ── */
+.outlet-selector {
+  margin-top: var(--space-2);
+  width: 100%;
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--round-sm);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-label-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Outlet Modal ── */
+.outlet-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.outlet-modal-overlay.open { display: flex; }
+
+.outlet-modal {
+  background: var(--surface-container);
+  border-radius: var(--round-lg);
+  padding: var(--space-6);
+  width: min(500px, 92vw);
+  box-shadow: var(--shadow-3);
+  animation: fade-in-up 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.outlet-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}

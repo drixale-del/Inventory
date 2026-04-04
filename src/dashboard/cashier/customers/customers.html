@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Customers</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="customers.css" />
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
+        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Customers</h1>
+          <p class="page-subtitle">Manage customer profiles and loyalty tiers.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);">
+          <button class="btn btn-secondary" onclick="Exporter.show('Customers')">
+            <span class="material-symbols-rounded">download</span>Export As...</button>
+          <button class="btn btn-primary" onclick="openAddCustomerModal()">
+            <span class="material-symbols-rounded">person_add</span> Add Customer
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="customers-kpi-row">
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Total Customers</div>
+          <div class="kpi-value" id="kpi-total-customers">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">groups</span> registered</div>
+        </div>
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Total Revenue</div>
+          <div class="kpi-value" id="kpi-total-revenue">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">trending_up</span> lifetime</div>
+        </div>
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Avg. Spend / Customer</div>
+          <div class="kpi-value" id="kpi-avg-spend">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">payments</span> per customer</div>
+        </div>
+        <div class="card kpi-card fade-in-up">
+          <div class="kpi-label">Loyalty Members</div>
+          <div class="kpi-value" id="kpi-loyalty-members">—</div>
+          <div class="kpi-sub"><span class="material-symbols-rounded" style="font-size:14px;">star</span> Gold &amp; Platinum</div>
+        </div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="card fade-in-up" style="padding:var(--space-4);margin-bottom:var(--space-4);">
+        <div style="display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap;">
+          <div style="position:relative;flex:1;min-width:220px;">
+            <span class="material-symbols-rounded" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--on-surface-variant);font-size:18px;">search</span>
+            <input class="input-field" id="cust-search" placeholder="Search name, email, phone…" style="padding-left:40px;" />
+          </div>
+          <div style="display:flex;gap:var(--space-2);">
+            <button class="chip active" onclick="filterByTier('all', this)">All</button>
+            <button class="chip" onclick="filterByTier('platinum', this)">💎 Platinum</button>
+            <button class="chip" onclick="filterByTier('gold', this)">🥇 Gold</button>
+            <button class="chip" onclick="filterByTier('silver', this)">🥈 Silver</button>
+            <button class="chip" onclick="filterByTier('bronze', this)">🥉 Bronze</button>
+          </div>
+          <span class="badge badge-neutral" id="customer-count" style="margin-left:auto;"></span>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card fade-in-up" style="overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Tier</th>
+                <th class="numeric">Visits</th>
+                <th class="numeric">Total Spend</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customer-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ADD / EDIT CUSTOMER MODAL -->
+<div class="customer-modal-overlay" id="customer-modal">
+  <div class="customer-modal">
+    <div class="customer-modal-header">
+      <div class="card-title" id="cust-modal-title" style="margin:0;">Add Customer</div>
+      <button class="btn btn-secondary btn-icon btn-sm" onclick="closeCustomerModal()">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Full Name *</label>
+        <input class="input-field" id="cm-name" type="text" placeholder="e.g. Sarah Kimani" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Email *</label>
+        <input class="input-field" id="cm-email" type="email" placeholder="customer@email.com" />
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Phone</label>
+      <input class="input-field" id="cm-phone" type="tel" placeholder="+254 700 000 000" />
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label class="input-label">Total Spend (for tier calc)</label>
+        <input class="input-field" id="cm-spend" type="number" step="0.01" placeholder="0.00" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Visit Count</label>
+        <input class="input-field" id="cm-visits" type="number" placeholder="0" />
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Notes (optional)</label>
+      <input class="input-field" id="cm-notes" type="text" placeholder="Any special preferences or info…" />
+    </div>
+    <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-2);">
+      <button class="btn btn-secondary" onclick="closeCustomerModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCustomer()">
+        <span class="material-symbols-rounded">save</span> Save Customer
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../../../data/store.js"></script>
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="customers.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../chatbot/chatbot.js"></script>
+<script src="../outlets/outlets.js"></script>
+<script src="../scanner/scanner.js"></script>
+<script src="../exporter/exporter.js"></script>
+<script src="../alerts/alerts.js"></script>
+</body>
+</html>

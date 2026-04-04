@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Inventory Management</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="../styles/inventory.css" />
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../assets/Public/Images/logo.png" alt="App Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+
+      <!-- User Profile Action -->
+      <button class="nav-item" style="margin-bottom: var(--space-4); margin-top: auto;" onclick="toggleProfileMenu(event)">
+        <!-- FontAwesome SVG -->
+        <svg style="width: 20px; height: 20px; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- Header -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Inventory Management</h1>
+          <p class="page-subtitle">Monitor stock health and manage product architectural data.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-secondary" onclick="Exporter.show('Inventory')">
+            <span class="material-symbols-rounded">download</span>Export As...</button>
+          <button class="btn btn-primary" onclick="openAddModal()">
+            <span class="material-symbols-rounded">add</span>
+            Add Product
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Row -->
+      <div class="inv-kpi-grid">
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon primary">
+              <span class="material-symbols-rounded">account_balance_wallet</span>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-stock-value">—</div>
+          <div class="kpi-label">Total Stock Value</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon error">
+              <span class="material-symbols-rounded">warning</span>
+            </div>
+            <span class="kpi-badge alert" id="kpi-low-badge">—</span>
+          </div>
+          <div class="kpi-value" id="kpi-low-count">—</div>
+          <div class="kpi-label">Items Low on Stock</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon secondary">
+              <span class="material-symbols-rounded">category</span>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-categories">—</div>
+          <div class="kpi-label">Total SKUs</div>
+        </div>
+      </div>
+
+      <!-- AI Insight -->
+      <div class="insight-card fade-in-up">
+        <span class="material-symbols-rounded filled">psychology</span>
+        <div class="insight-text">
+          <div class="insight-title">Architectural Analysis</div>
+          <div class="insight-body">
+            Your current inventory turnover rate is <strong>12% higher</strong> than the industry average for hardware supplies.
+            Recommended: Increase stock for the <strong>'Titanium Screws'</strong> series and reorder <strong>'Carbon Steel Fasteners'</strong> — only 7 units remain.
+          </div>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="card fade-in-up">
+        <div class="table-toolbar">
+          <div class="flex items-center gap-3">
+            <div class="card-title" style="margin-bottom:0;">Quick Scan Ledger</div>
+            <span class="badge badge-neutral" id="product-count-badge">12 items</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="filter-chips">
+              <button class="chip active" onclick="filterTable('all', this)">All</button>
+              <button class="chip" onclick="filterTable('In Stock', this)">In Stock</button>
+              <button class="chip" onclick="filterTable('Low Stock', this)">Low Stock</button>
+              <button class="chip" onclick="filterTable('Out of Stock', this)">Out of Stock</button>
+            </div>
+            <div class="search-bar">
+              <span class="material-symbols-rounded">search</span>
+              <input class="search-input" id="inv-search" type="text" placeholder="Search SKU or name…" oninput="renderTable()" />
+            </div>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th onclick="sortTable('sku')">SKU <span class="sort-icon material-symbols-rounded">unfold_more</span></th>
+                <th onclick="sortTable('name')">Product <span class="sort-icon material-symbols-rounded">unfold_more</span></th>
+                <th onclick="sortTable('category')">Category <span class="sort-icon material-symbols-rounded">unfold_more</span></th>
+                <th onclick="sortTable('stock')">In Stock <span class="sort-icon material-symbols-rounded">unfold_more</span></th>
+                <th onclick="sortTable('price')">Unit Price <span class="sort-icon material-symbols-rounded">unfold_more</span></th>
+                <th onclick="sortTable('status')">Status <span class="sort-icon material-symbols-rounded">unfold_more</span></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inv-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add Product</div>
+      <button class="btn btn-secondary btn-icon" onclick="closeModal()">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">Product Name</label>
+          <input class="input-field" id="f-name" type="text" placeholder="e.g. Titanium Drill Bit Set" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">SKU</label>
+          <input class="input-field" id="f-sku" type="text" placeholder="e.g. IND-9230-T" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">Category</label>
+          <input class="input-field" id="f-category" type="text" placeholder="e.g. Tools" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Stock Count</label>
+          <input class="input-field" id="f-stock" type="number" min="0" placeholder="0" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">Unit Price ($)</label>
+          <input class="input-field" id="f-price" type="number" min="0" step="0.01" placeholder="0.00" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Cost Price ($)</label>
+          <input class="input-field" id="f-cost" type="number" min="0" step="0.01" placeholder="0.00" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProduct()">
+        <span class="material-symbols-rounded">save</span>
+        Save Product
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../../../data/store.js"></script>
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="../../../renderer/inventory.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
+<script src="../../../outlets/outlets.js"></script>
+<script src="../../../scanner/scanner.js"></script>
+<script src="../../../exporter/exporter.js"></script>
+<script src="../../../alerts/alerts.js"></script>
+</body>
+</html>

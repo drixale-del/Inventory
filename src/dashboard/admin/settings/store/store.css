@@ -1,0 +1,6 @@
+/* Store Info specific styles */
+.settings-panel-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Dynamic Pricing</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="pricing.css" />
+  
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../../assets/Public/Images/logo.png" alt="App Logo" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Inventory System</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
+        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
+        <span class="nav-label">Alex Sterling</span>
+      </button>
+    </aside>
+
+    <main class="page-content">
+
+      <!-- PAGE HEADER -->
+      <div class="pricing-header fade-in-up">
+        <div>
+          <h1 class="page-title">Algorithmic Pricing Strategy</h1>
+          <p class="page-subtitle">Automatically adjust retail tags based inversely on storage turnover velocities and demand.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);">
+          <button class="btn btn-secondary" onclick="PricingEngine.renderDashboard()">
+            <span class="material-symbols-rounded">refresh</span> Re-Calculate
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI SCALES -->
+      <div class="pricing-kpis fade-in-up">
+        <div class="pricing-kpi">
+          <div class="kpi-label">Active Suggestions</div>
+          <div class="kpi-value" id="pr-kpi-total">—</div>
+        </div>
+        <div class="pricing-kpi" style="background:var(--primary-container); color:var(--on-primary-container);">
+          <div class="kpi-label">Markup Opportunities</div>
+          <div class="kpi-value" id="pr-kpi-up" style="color: #2e7d32">—</div>
+        </div>
+        <div class="pricing-kpi" style="background:#ffebee; color:#c62828;">
+          <div class="kpi-label">Markdown / Liquidations</div>
+          <div class="kpi-value" id="pr-kpi-down">—</div>
+        </div>
+      </div>
+
+      <!-- VISUAL ANALYTICS -->
+      <div class="card fade-in-up" style="margin-bottom: var(--space-6); padding: var(--space-4);">
+        <div style="font-weight:600; margin-bottom:var(--space-4); color:var(--on-surface);">Profit Margin Distribution</div>
+        <div style="height: 200px; position: relative;">
+          <canvas id="pr-chart-margins"></canvas>
+        </div>
+      </div>
+
+      <!-- SUGGESTIONS LIST -->
+      <h2 style="font-size: var(--text-body-lg); margin-bottom: var(--space-4); color: var(--on-surface);">Pending Actions</h2>
+      <div class="suggestion-list" id="suggestion-list">
+        <!-- populated by parsing algorithm -->
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../data/store.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+
+<!-- Addons -->
+<script src="../outlets/outlets.js"></script>
+<script src="../scanner/scanner.js"></script>
+<script src="../alerts/alerts.js"></script>
+
+<!-- Pricing -->
+<script src="pricing.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTitlebar();
+    initNav('pricing');
+  });
+</script>
+
+<script src="../../../platform/platform.js"></script>
+<script src="../chatbot/chatbot.js"></script>
+</body>
+</html>

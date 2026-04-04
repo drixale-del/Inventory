@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push Notifications — Precision POS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="../styles/modern-normalize.css">
+    <link rel="stylesheet" href="../styles/tokens.css">
+    <link rel="stylesheet" href="../styles/components.css">
+    <link rel="stylesheet" href="notifications.css">
+</head>
+<body class="surface">
+
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-title">
+                    <h4>Push Notification Settings</h4>
+                    <p class="text-secondary">Configure your system-level business alerts.</p>
+                </div>
+            </header>
+
+            <div class="settings-grid">
+                <!-- 1. Global Settings -->
+                <section class="card settings-section">
+                    <div class="section-badge">
+                        <span class="material-symbols-rounded">notifications_active</span>
+                        GLOBAL CONTROLS
+                    </div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Enable Push Notifications</span>
+                                <span class="setting-hint">Deliver critical alerts to your desktop.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="push-enabled" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Thresholds -->
+                <section class="card settings-section">
+                    <div class="section-badge highlight">
+                        <span class="material-symbols-rounded">rocket_launch</span>
+                        ALERTS & THRESHOLDS
+                    </div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">"Big Sale" Threshold</span>
+                                <span class="setting-hint">Notify when a single sale exceeds this value.</span>
+                            </div>
+                            <div class="input-group-currency">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="sale-threshold" value="1000" class="input-sm">
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Stockout Notifications</span>
+                                <span class="setting-hint">Push alerts when items hit 0 stock.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="stock-notify" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Critical Task Alerts</span>
+                                <span class="setting-hint">Notify for urgent P&L anomalies or approvals.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="task-notify" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Historical Log -->
+                <section class="card history-section">
+                    <div class="section-badge">
+                        <span class="material-symbols-rounded">history</span>
+                        RECENT PUSH HISTORY
+                    </div>
+                    <div id="notification-history" class="history-list">
+                         <div class="empty-state">
+                             <span class="material-symbols-rounded">info</span>
+                             <p>No recent system alerts triggered.</p>
+                         </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../../data/store.js"></script>
+    <script src="../../../window-manager/ui.js"></script>
+    <script src="../../../renderer/nav.js"></script>
+    <script src="notifications.js"></script>
+    <script>
+        // Local UI Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const settings = NotificationEngine.getSettings();
+            
+            // Sync UI State
+            document.getElementById('push-enabled').checked = settings.enabled;
+            document.getElementById('sale-threshold').value = settings.bigSaleThreshold;
+            document.getElementById('stock-notify').checked = settings.notifyStockouts;
+            document.getElementById('task-notify').checked = settings.notifyTasks;
+
+            // Handle Changes
+            const inputs = ['push-enabled', 'sale-threshold', 'stock-notify', 'task-notify'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('change', () => {
+                    NotificationEngine.saveSettings({
+                        enabled: document.getElementById('push-enabled').checked,
+                        bigSaleThreshold: parseFloat(document.getElementById('sale-threshold').value) || 1000,
+                        notifyStockouts: document.getElementById('stock-notify').checked,
+                        notifyTasks: document.getElementById('task-notify').checked
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

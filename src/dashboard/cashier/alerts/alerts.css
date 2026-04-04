@@ -1,0 +1,86 @@
+/* ============================================================
+   alerts.css — Smart Alerts & Notifications UI
+   ============================================================ */
+
+.alerts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.alerts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alert-card {
+  background: var(--surface-container);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--round-lg);
+  padding: var(--space-4);
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  transition: all var(--transition-base);
+  animation: fade-in-up 0.2s ease;
+}
+.alert-card:hover { border-color: var(--outline-variant); }
+
+.alert-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--round-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.alert-icon-box .material-symbols-rounded { font-size: 24px; }
+
+/* Themes */
+.alert-critical .alert-icon-box { background: color-mix(in srgb, #ba1a1a 12%, transparent); color: #ba1a1a; }
+.alert-warning .alert-icon-box { background: color-mix(in srgb, #e6a23c 15%, transparent); color: #b88230; }
+.alert-info .alert-icon-box { background: color-mix(in srgb, #0972d3 12%, transparent); color: #0972d3; }
+
+.alert-content {
+  flex-grow: 1;
+}
+
+.alert-title {
+  font-weight: 600;
+  font-size: var(--text-body-md);
+  color: var(--on-surface);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+.alert-time {
+  font-size: var(--text-label-sm);
+  color: var(--on-surface-variant);
+  font-weight: 400;
+}
+
+.alert-desc {
+  font-size: var(--text-body-sm);
+  color: var(--on-surface-variant);
+  margin-bottom: var(--space-3);
+  line-height: 1.4;
+}
+
+.alert-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Global Nav Badge styling */
+.nav-badge {
+  background: #ba1a1a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: var(--round-full);
+  margin-left: auto;
+}

@@ -1,0 +1,36 @@
+<!-- Display Preferences Panel -->
+<div class="settings-panel-inner">
+  <div class="card-title">Display Preferences</div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Dark Mode</div>
+      <div class="setting-desc">Switch to a dark interface (coming soon)</div>
+    </div>
+    <button class="toggle" id="toggle-dark" onclick="DisplaySettings.toggle('dark', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Compact Layout</div>
+      <div class="setting-desc">Reduce table row height for more data density</div>
+    </div>
+    <button class="toggle" id="toggle-compact" onclick="DisplaySettings.toggle('compact', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Animations</div>
+      <div class="setting-desc">Enable micro-animations throughout the app</div>
+    </div>
+    <button class="toggle" id="toggle-animations" onclick="DisplaySettings.toggle('animations', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Sidebar Collapsed by Default</div>
+      <div class="setting-desc">Start each session with the sidebar in mini mode</div>
+    </div>
+    <button class="toggle" id="toggle-sidebar" onclick="DisplaySettings.toggle('sidebar', this)"></button>
+  </div>
+</div>

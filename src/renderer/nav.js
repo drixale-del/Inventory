@@ -1,0 +1,193 @@
+/* ============================================================
+   nav.js — Navigation only.
+   Window controls (resize, snap, sidebar) live in
+   src/window-manager/ui.js which is loaded separately.
+   ============================================================ */
+
+const NAV_ITEMS = [
+  { id: 'cashier-dash', label: 'Cashier Hub', icon: 'point_of_sale', path: '../dashboard/cashier/pages/cashier.html' },
+  { id: 'manager-dash', label: 'Manager Ops', icon: 'analytics',     path: '../dashboard/manager/manager.html' },
+  { id: 'admin-dash',   label: 'Admin Nexus', icon: 'admin_panel_settings', path: '../dashboard/admin/admin.html' },
+  { id: 'pos',        label: 'POS',        icon: 'point_of_sale',   path: '../dashboard/cashier/pages/pos.html'        },
+  { id: 'inventory',  label: 'Inventory',  icon: 'inventory_2',     path: '../dashboard/cashier/pages/inventory.html'  },
+  { id: 'reports',    label: 'Reports',    icon: 'analytics',       path: '../dashboard/cashier/pages/reports.html'    },
+  { id: 'suppliers',  label: 'Suppliers',  icon: 'local_shipping',  path: '../dashboard/cashier/suppliers/suppliers.html'  },
+  { id: 'outlets',    label: 'Branches',   icon: 'storefront',      path: '../dashboard/cashier/outlets/outlets.html'  },
+  { id: 'customers',  label: 'Customers',  icon: 'groups',          path: '../dashboard/cashier/customers/customers.html' },
+  { id: 'returns',    label: 'Returns',    icon: 'assignment_return', path: '../dashboard/cashier/returns/returns.html' },
+  { id: 'automations',label: 'Automated Reports', icon: 'auto_timer', path: '../dashboard/cashier/automation/automation.html' },
+  { id: 'smart_notifications', label: 'Smart Alerts Hub', icon: 'notifications_active', path: '../dashboard/cashier/smart-notifications/index.html' },
+  { id: 'alerts',     label: 'Direct Alerts',   icon: 'notification_important', path: '../dashboard/cashier/alerts/alerts.html' },
+  { id: 'lifecycle',  label: 'Product Lifecycle', icon: 'auto_graph', path: '../dashboard/cashier/lifecycle/lifecycle.html'},
+  { id: 'pricing',    label: 'Dynamic Pricing', icon: 'price_check', path: '../dashboard/cashier/pricing/pricing.html'},
+  { id: 'promotions', label: 'Bundles & Promos', icon: 'loyalty', path: '../dashboard/cashier/promotions/promotions.html'},
+  { id: 'accounting', label: 'Accounting Sync', icon: 'account_balance_wallet', path: '../dashboard/cashier/accounting/accounting.html'},
+  { id: 'ecommerce',  label: 'E-commerce Sync', icon: 'cloud_sync', path: '../dashboard/cashier/ecommerce/ecommerce.html'},
+  { id: 'comms',      label: 'Automation & Comms', icon: 'hub', path: '../dashboard/cashier/comms/comms.html'},
+  { id: 'notifications', label: 'Push Notifications', icon: 'notification_add', path: '../dashboard/cashier/Push_notifications/notifications.html' },
+];
+
+function initNav(activePage) {
+  const sidebar = document.getElementById('sidebar-nav');
+  if (!sidebar) return;
+
+  // Only show settings if we are in an admin-related page
+  const isAdminContext = activePage === 'admin-dash' || activePage === 'settings' || window.location.href.includes('/admin/');
+  
+  let items = [...NAV_ITEMS];
+  if (isAdminContext) {
+    items.push({ id: 'settings', label: 'Settings', icon: 'settings', path: '../dashboard/admin/pages/settings.html' });
+  }
+
+  const navHtml = items.map(item => `
+    <button
+      class="nav-item ${item.id === activePage ? 'active' : ''}"
+      onclick="navigateTo('${item.id}')"
+      id="nav-${item.id}"
+      title="${item.label}"
+    >
+      <span class="material-symbols-rounded">${item.icon}</span>
+      <span class="nav-label">${item.label}</span>
+    </button>
+  `).join('');
+
+  // Add "Switch Role" button at the bottom
+  const switchRoleHtml = `
+    <div class="sidebar-divider"></div>
+    <button class="nav-item logout" onclick="navigateTo('launcher')" title="Switch Hub">
+      <span class="material-symbols-rounded">logout</span>
+      <span class="nav-label">Switch Role</span>
+    </button>
+  `;
+
+  sidebar.innerHTML = navHtml + switchRoleHtml;
+}
+
+// Absolute page paths relative to src/ (used to compute href from any subfolder)
+const PAGE_PATHS = {
+  launcher:     'role-selection/launcher.html',
+  'cashier-dash': 'dashboard/cashier/pages/cashier.html',
+  'manager-dash': 'dashboard/manager/manager.html',
+  'admin-dash':   'dashboard/admin/admin.html',
+  pos:        'dashboard/cashier/pages/pos.html',
+  inventory:  'dashboard/cashier/pages/inventory.html',
+  reports:    'dashboard/cashier/pages/reports.html',
+  suppliers:  'dashboard/cashier/suppliers/suppliers.html',
+  outlets:    'dashboard/cashier/outlets/outlets.html',
+  settings:   'dashboard/admin/pages/settings.html',
+  customers:  'dashboard/cashier/customers/customers.html',
+  returns:    'dashboard/cashier/returns/returns.html',
+  automations: 'dashboard/cashier/automation/automation.html',
+  smart_notifications: 'dashboard/cashier/smart-notifications/index.html',
+  alerts:     'dashboard/cashier/alerts/alerts.html',
+  lifecycle:  'dashboard/cashier/lifecycle/lifecycle.html',
+  pricing:    'dashboard/cashier/pricing/pricing.html',
+  promotions: 'dashboard/cashier/promotions/promotions.html',
+  accounting: 'dashboard/cashier/accounting/accounting.html',
+  ecommerce:  'dashboard/cashier/ecommerce/ecommerce.html',
+  comms:      'dashboard/cashier/comms/comms.html',
+  notifications: 'dashboard/cashier/Push_notifications/notifications.html',
+};
+
+
+function navigateTo(page) {
+  // In Electron, always send the page ID — ipc.js uses the full PAGE_MAP
+  if (window.electronAPI) {
+    window.electronAPI.navigate(page);
+    return;
+  }
+  // Browser fallback: find the src/ root, then append the target path
+  const relPath = PAGE_PATHS[page];
+  if (relPath) {
+    const href   = window.location.href;
+    const srcIdx = href.lastIndexOf('/src/');
+    if (srcIdx !== -1) {
+      window.location.href = href.substring(0, srcIdx + 5) + relPath;
+      return;
+    }
+  }
+  window.location.href = `${page}.html`;
+}
+
+
+/* initTitlebar — kept so all existing page scripts work unchanged.
+   Delegates to initWindowControls() which is defined in
+   window-manager/ui.js (loaded right after this file). */
+function initTitlebar() {
+  // ui.js is loaded after nav.js, so initWindowControls is available here.
+  if (typeof initWindowControls === 'function') {
+    initWindowControls();
+  }
+}
+
+/* ============================================================
+   Profile Menu System
+   ============================================================ */
+function toggleProfileMenu(event) {
+  event.stopPropagation();
+  let menu = document.getElementById('global-profile-menu');
+  
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.id = 'global-profile-menu';
+    menu.className = 'profile-menu fade-in-up';
+    // Use an absolute position for appending so it ignores sidebar overflow
+    menu.style.position = 'fixed';
+    
+    menu.innerHTML = `
+      <button class="profile-menu-item" onclick="alert('Terms & Conditions')">
+        <span class="material-symbols-rounded">description</span> Terms & Conditions
+      </button>
+      <button class="profile-menu-item" onclick="alert('Privacy Policy')">
+        <span class="material-symbols-rounded">policy</span> Privacy Policy
+      </button>
+      <button class="profile-menu-item" onclick="navigateTo('settings')">
+        <span class="material-symbols-rounded">settings</span> Settings
+      </button>
+      <div style="height: 1px; background: var(--outline-variant); margin: var(--space-1) 0;"></div>
+      <button class="profile-menu-item" onclick="alert('Copyright 2026')">
+        <span class="material-symbols-rounded">copyright</span> Copyright
+      </button>
+    `;
+    
+    document.body.appendChild(menu);
+  }
+
+  const isShowing = menu.classList.contains('show');
+
+  // Close all other instances if exist (or just this one)
+  document.querySelectorAll('.profile-menu.show').forEach(m => m.classList.remove('show'));
+
+  if (!isShowing) {
+    const btnRect = event.currentTarget.getBoundingClientRect();
+    
+    // Position menu:
+    // Left edge aligns with the profile button left edge
+    // Bottom edge sits just above the profile button top edge
+    menu.style.left = btnRect.left + 'px';
+    menu.style.bottom = (window.innerHeight - btnRect.top + 8) + 'px';
+    
+    // Force a reflow
+    void menu.offsetWidth;
+    
+    menu.classList.add('show');
+    
+    // Listen for outside clicks
+    document.addEventListener('click', closeProfileMenu);
+  } else {
+    document.removeEventListener('click', closeProfileMenu);
+  }
+}
+
+function closeProfileMenu(e) {
+  const menu = document.getElementById('global-profile-menu');
+  if (!menu) return;
+  
+  // If we click inside the menu itself (but not closing it intentionally via an item)
+  if (e.target.closest('#global-profile-menu') && !e.target.closest('.profile-menu-item')) {
+    return;
+  }
+  
+  menu.classList.remove('show');
+  document.removeEventListener('click', closeProfileMenu);
+}

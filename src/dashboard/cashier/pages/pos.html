@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Precision POS — Sales Terminal</title>
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="../styles/pos.css" />
+  <link rel="stylesheet" href="../outlets/outlets.css" />
+  <link rel="stylesheet" href="../scanner/scanner.css" />
+  <link rel="stylesheet" href="../exporter/exporter.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">inventory_2</span>
+      Precision POS
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">WA</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Warehouse Admin</div>
+          <div class="sidebar-user-role">ID: #8829-PX</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+    </aside>
+
+    <!-- POS LAYOUT (no page-content wrapper — full height) -->
+    <div class="pos-layout">
+
+      <!-- Products Panel -->
+      <div class="pos-products">
+        <div class="pos-header">
+          <div>
+            <h1 class="page-title">Sales Terminal</h1>
+            <p class="page-subtitle" style="margin-top: var(--space-1);">Tap a product to add it to the active sale.</p>
+          </div>
+          <div class="pos-toolbar">
+            <button class="customer-chip" id="customer-btn">
+              <span class="material-symbols-rounded">person</span>
+              <span id="customer-label">Walk-in Customer</span>
+              <span class="material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="search-bar">
+              <span class="material-symbols-rounded">search</span>
+              <input class="search-input" id="product-search" type="text" placeholder="Search products…" />
+            </div>
+          </div>
+        </div>
+
+        <div class="product-scroll">
+          <div class="product-grid" id="product-grid"></div>
+        </div>
+      </div>
+
+      <!-- Live Ledger -->
+      <div class="live-ledger">
+        <div class="ledger-header">
+          <div class="ledger-txn-id">
+            <span class="material-symbols-rounded" style="font-size:14px;vertical-align:middle;">confirmation_number</span>
+            TXN-<span id="txn-id">008924</span>
+          </div>
+          <div class="ledger-customer">
+            <span class="material-symbols-rounded">person</span>
+            <span id="ledger-customer">Walk-in Customer</span>
+          </div>
+        </div>
+
+        <div class="ledger-items" id="ledger-items"></div>
+
+        <div class="ledger-footer">
+          <div class="discount-row">
+            <input class="discount-input" id="discount-input" type="text" placeholder="Discount code…" />
+            <button class="btn btn-secondary btn-sm" onclick="applyDiscount()">Apply</button>
+          </div>
+          <div>
+            <div class="ledger-line">
+              <span>Subtotal</span>
+              <span id="subtotal">$0.00</span>
+            </div>
+            <div class="ledger-line">
+              <span>Tax (8%)</span>
+              <span id="tax-amount">$0.00</span>
+            </div>
+            <div class="ledger-line" id="discount-line" style="display:none;color:var(--secondary);">
+              <span>Discount</span>
+              <span id="discount-val">-$0.00</span>
+            </div>
+            <div class="divider"></div>
+            <div class="ledger-line">
+              <span style="font-weight:700;color:var(--on-surface);font-size:var(--text-body-md);">TOTAL</span>
+              <span class="ledger-total" id="grand-total">$0.00</span>
+            </div>
+          </div>
+          <button class="checkout-btn" id="checkout-btn" disabled onclick="checkout()">
+            <span class="material-symbols-rounded">payments</span>
+            Charge Total
+          </button>
+          <button class="btn btn-secondary" style="width:100%;justify-content:center;" onclick="clearCart()">
+            <span class="material-symbols-rounded">delete_sweep</span>
+            Clear Sale
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="material-symbols-rounded">check_circle</span>
+  <span id="toast-msg">Done</span>
+</div>
+
+<script src="../../../data/store.js"></script>
+<script src="../../../dashboard/admin/settings/region/currency.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="../../../renderer/pos.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
+<script src="../../../outlets/outlets.js"></script>
+<script src="../../../scanner/scanner.js"></script>
+<script src="../../../exporter/exporter.js"></script>
+<script src="../../../alerts/alerts.js"></script>
+<script src="../../../promotions/promotions.js"></script>
+</body>
+</html>

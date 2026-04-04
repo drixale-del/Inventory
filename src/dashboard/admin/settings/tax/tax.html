@@ -1,0 +1,41 @@
+<!-- Tax & Currency Panel -->
+<div class="settings-panel-inner">
+  <div class="card-title">Tax &amp; Currency</div>
+
+  <div class="form-row">
+    <div class="input-group">
+      <label class="input-label">Tax Rate (%)</label>
+      <input class="input-field" id="t-rate" type="number" step="0.1" min="0" max="100" value="8" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">Tax Name / Label</label>
+      <input class="input-field" id="t-name" type="text" value="Sales Tax" />
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label">Tax Registration Number (optional)</label>
+    <input class="input-field" id="t-reg" type="text" placeholder="e.g. TRN-0012345" />
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Tax Inclusive Pricing</div>
+      <div class="setting-desc">Display prices with tax already included</div>
+    </div>
+    <button class="toggle" id="toggle-tax-inclusive" onclick="TaxSettings.toggle('taxInclusive', this)"></button>
+  </div>
+
+  <div class="setting-row">
+    <div>
+      <div class="setting-label">Show Tax Breakdown on Receipts</div>
+      <div class="setting-desc">Print itemised tax amount on every receipt</div>
+    </div>
+    <button class="toggle" id="toggle-tax-receipt" onclick="TaxSettings.toggle('showOnReceipt', this)"></button>
+  </div>
+
+  <button class="btn btn-primary" style="align-self:flex-start;" onclick="TaxSettings.save()">
+    <span class="material-symbols-rounded">save</span> Save Tax Settings
+  </button>
+  <span id="tax-status" class="region-status-msg" style="display:none;"></span>
+</div>

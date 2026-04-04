@@ -1,0 +1,124 @@
+/* ============================================================
+   SETTINGS — Page Styles
+   ============================================================ */
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* ── Settings Sidebar Nav ── */
+.settings-nav { display: flex; flex-direction: column; gap: var(--space-1); }
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--round-md);
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  transition: all var(--transition-fast);
+}
+.settings-nav-item:hover { background: var(--surface-container-high); color: var(--on-surface); }
+.settings-nav-item.active { background: var(--primary-fixed); color: var(--primary); font-weight: 600; }
+.settings-nav-item .material-symbols-rounded { font-size: 20px; }
+
+/* ── Settings Panels ── */
+.settings-section { display: none; flex-direction: column; gap: var(--space-6); }
+.settings-section.active { display: flex; }
+
+/* ── Setting Row ── */
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--surface-container-high);
+  gap: var(--space-4);
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-label { font-weight: 600; font-size: var(--text-body-sm); color: var(--on-surface); }
+.setting-desc  { font-size: var(--text-label-sm); color: var(--on-surface-variant); margin-top: 2px; }
+
+/* ── Toggle Switch ── */
+.toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: var(--round-full);
+  background: var(--surface-container-high);
+  cursor: pointer;
+  position: relative;
+  border: none;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+.toggle.on { background: var(--primary); }
+.toggle.on::after { transform: translateX(20px); }
+
+/* ── Version Badge ── */
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface-container-low);
+  border-radius: var(--round-lg);
+  font-size: var(--text-label-md);
+  color: var(--on-surface-variant);
+}
+
+/* ── Dynamic Panel Shell ── */
+.settings-section {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-height: 200px;
+}
+.settings-section.active { display: flex; }
+
+/* ── Loading State ── */
+.settings-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
+  color: var(--on-surface-variant);
+  font-size: var(--text-body-sm);
+  min-height: 180px;
+}
+
+/* ── Panel Inner Content ── */
+.settings-panel-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Spin animation for loading icon ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+

@@ -1,0 +1,91 @@
+/* ============================================================
+   pricing.css — Dynamic Price Suggestions UI
+   ============================================================ */
+
+.pricing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.pricing-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.pricing-kpi {
+  background: var(--primary-fixed);
+  color: var(--on-primary-fixed);
+  padding: var(--space-4);
+  border-radius: var(--round-lg);
+  display: flex;
+  flex-direction: column;
+}
+.pricing-kpi .kpi-label { font-size: var(--text-label-sm); font-weight: 600; text-transform: uppercase; margin-bottom: var(--space-2); opacity: 0.8;}
+.pricing-kpi .kpi-value { font-family: var(--font-headline); font-size: 32px; font-weight: 700; }
+
+.suggestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.suggestion-card {
+  background: var(--surface-container);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--round-lg);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.suggestion-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--outline-variant); }
+
+.sug-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--round-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sug-up { background: #e8f5e9; color: #2e7d32; }
+.sug-down { background: #ffebee; color: #c62828; }
+
+.sug-details { flex: 1; min-width: 0; }
+.sug-title { font-weight: 600; color: var(--on-surface); font-size: var(--text-body-lg); margin-bottom: 2px; }
+.sug-desc { font-size: var(--text-body-sm); color: var(--on-surface-variant); }
+
+.sug-numbers {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-right: var(--space-4);
+}
+.sug-old-price { text-decoration: line-through; color: var(--on-surface-variant); font-size: var(--text-body-md); }
+.sug-arrow { color: var(--outline); }
+.sug-new-price { font-weight: 700; font-size: 20px; }
+.sug-new-price.up { color: #2e7d32; }
+.sug-new-price.down { color: #c62828; }
+
+.sug-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Empty State */
+.suggestion-empty {
+  text-align: center;
+  padding: var(--space-8);
+  background: var(--surface-container-lowest);
+  border: 2px dashed var(--surface-container-high);
+  border-radius: var(--round-lg);
+  color: var(--on-surface-variant);
+}
