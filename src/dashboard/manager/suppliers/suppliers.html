@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Precision POS — Suppliers</title>
-  <link rel="stylesheet" href="../styles/tokens.css" />
-  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="../../cashier/styles/tokens.css" />
+  <link rel="stylesheet" href="../../cashier/styles/components.css" />
   <link rel="stylesheet" href="suppliers.css" />
-  <link rel="stylesheet" href="../outlets/outlets.css" />
-  <link rel="stylesheet" href="../scanner/scanner.css" />
-  <link rel="stylesheet" href="../exporter/exporter.css" />
+  <link rel="stylesheet" href="../../cashier/outlets/outlets.css" />
+  <link rel="stylesheet" href="../../cashier/scanner/scanner.css" />
+  <link rel="stylesheet" href="../../cashier/exporter/exporter.css" />
 </head>
 <body>
 <div class="app-shell">
@@ -41,10 +41,16 @@
       <div class="sidebar-section-label">Main Menu</div>
       <nav id="sidebar-nav"></nav>
       <div class="sidebar-spacer"></div>
-      <button class="nav-item" style="margin-bottom:var(--space-4);margin-top:auto;" onclick="toggleProfileMenu(event)">
-        <svg style="width:20px;height:20px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/></svg>
-        <span class="nav-label">Alex Sterling</span>
-      </button>
+      <!-- User Profile Fixed Footer -->
+      <div class="sidebar-footer">
+        <button class="nav-item profile-btn" onclick="toggleProfileMenu(event)">
+          <span class="material-symbols-rounded">account_circle</span>
+          <span class="nav-label">Alex Sterling</span>
+        </button>
+        <div class="sidebar-version">
+          Suppliers Hub · v1.0.0
+        </div>
+      </div>
     </aside>
 
     <main class="page-content">
@@ -194,14 +200,14 @@
 
 <!-- SCRIPTS -->
 <script src="../../../data/store.js"></script>
-<script src="../exporter/exporter.js"></script> <!-- Will be added shortly -->
+<script src="../../cashier/exporter/exporter.js"></script> <!-- Will be added shortly -->
 <script src="../../../renderer/nav.js"></script>
 <script src="../../../window-manager/ui.js"></script>
 <script src="suppliers.js"></script>
 <script src="../../../platform/platform.js"></script>
-<script src="../chatbot/chatbot.js"></script>
-<script src="../outlets/outlets.js"></script>
-<script src="../scanner/scanner.js"></script>
-<script src="../alerts/alerts.js"></script>
+<script src="../../../../chatbot/chatbot.js"></script>
+<script src="../../cashier/outlets/outlets.js"></script>
+<script src="../../cashier/scanner/scanner.js"></script>
+<script src="../../cashier/alerts/alerts.js"></script>
 </body>
 </html>

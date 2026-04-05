@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Processing Terminal — Precision POS</title>
+  
+  <link rel="stylesheet" href="../styles/tokens.css" />
+  <link rel="stylesheet" href="../styles/components.css" />
+  <link rel="stylesheet" href="sales-processing.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">point_of_sale</span>
+      Sales Processing Terminal
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">CS</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Cashier Hub</div>
+          <div class="sidebar-user-role">Strategic Session</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Main Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+
+      <!-- User Profile Fixed Footer -->
+      <div class="sidebar-footer">
+        <button class="nav-item profile-btn" onclick="toggleProfileMenu(event)">
+          <span class="material-symbols-rounded">account_circle</span>
+          <span class="nav-label">Alex Sterling</span>
+        </button>
+        <div class="sidebar-version">
+          POS Terminal · v1.0.0
+        </div>
+      </div>
+    </aside>
+
+    <!-- POS LAYOUT -->
+    <div class="pos-layout">
+      
+      <!-- Products Panel -->
+      <div class="pos-products">
+        <div class="pos-header fade-in-up">
+          <div>
+            <h1 class="page-title">Direct Sales</h1>
+            <p class="page-subtitle">Select items or scan barcodes to build the order.</p>
+          </div>
+          <div class="pos-toolbar">
+            <div style="position:relative; width:300px;">
+              <span class="material-symbols-rounded" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--on-surface-variant);">search</span>
+              <input class="input-field" id="product-search" placeholder="Search products or SKU…" style="padding-left:40px;" />
+            </div>
+          </div>
+        </div>
+
+        <div class="product-grid" id="product-grid">
+           <!-- Loaded by JS -->
+        </div>
+      </div>
+
+      <!-- Live Ledger / Cart -->
+      <div class="live-ledger">
+        <div class="ledger-header">
+           <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-weight:700; font-size:18px;">Active Session</div>
+              <div class="badge badge-primary">TXN-${Math.floor(Math.random()*100000)}</div>
+           </div>
+           <div style="font-size:12px; color:var(--on-surface-variant); margin-top:4px;">
+              Walk-in Customer · Standard Pricing
+           </div>
+        </div>
+
+        <div class="ledger-items" id="ledger-items">
+           <!-- Cart Items Injected -->
+        </div>
+
+        <div class="ledger-footer">
+          <!-- Discount System -->
+          <div style="display:flex; gap:8px;">
+             <input class="input-field" id="discount-input" type="number" placeholder="Discount %" style="flex:1;" />
+             <button class="btn btn-secondary" onclick="applyDiscount()">Override</button>
+          </div>
+
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+             <div class="ledger-line"><span>Subtotal</span> <span id="subtotal">$0.00</span></div>
+             <div class="ledger-line"><span>Tax (8.00%)</span> <span id="tax-amount">$0.00</span></div>
+             <div class="ledger-line" id="discount-line" style="display:none; color:var(--secondary); font-weight:600;">
+                <span>Strategic Discount</span> <span id="discount-val">-$0.00</span>
+             </div>
+             <div class="ledger-line" style="margin-top:8px;">
+                <span style="font-weight:700; color:var(--on-surface);">TOTAL DUE</span>
+                <span class="ledger-total" id="grand-total">$0.00</span>
+             </div>
+          </div>
+
+          <button class="checkout-btn" id="checkout-btn" disabled onclick="openPaymentModal()">
+            <span class="material-symbols-rounded">payments</span>
+            PROCESS PAYMENT
+          </button>
+          
+          <button class="btn btn-secondary" style="width:100%; margin-top:8px;" onclick="clearCart()">
+            <span class="material-symbols-rounded">delete_sweep</span>
+            VOID TRANSACTION
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="payment-modal" id="payment-modal">
+  <div class="payment-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+       <h2 style="margin:0; font-size:20px; font-weight:700;">Finalize Transaction</h2>
+       <button class="btn btn-icon btn-secondary" onclick="document.getElementById('payment-modal').style.display='none'">
+         <span class="material-symbols-rounded">close</span>
+       </button>
+    </div>
+
+    <div style="background:var(--surface-container-high); padding:20px; border-radius:12px; text-align:center; margin-bottom:24px;">
+       <div style="font-size:12px; color:var(--on-surface-variant); text-transform:uppercase; letter-spacing:1px;">Amount to Charge</div>
+       <div style="font-size:36px; font-weight:800; color:var(--primary);" id="payment-amount-display">$0.00</div>
+    </div>
+
+    <div class="payment-methods">
+       <div class="payment-method active" id="pay-cash" onclick="selectPaymentMethod('cash')">
+          <span class="material-symbols-rounded">payments</span>
+          <div style="font-weight:600; font-size:12px;">CASH</div>
+       </div>
+       <div class="payment-method" id="pay-card" onclick="selectPaymentMethod('card')">
+          <span class="material-symbols-rounded">credit_card</span>
+          <div style="font-weight:600; font-size:12px;">CARD</div>
+       </div>
+       <div class="payment-method" id="pay-mobile" onclick="selectPaymentMethod('mobile')">
+          <span class="material-symbols-rounded">smartphone</span>
+          <div style="font-weight:600; font-size:12px;">MOBILE</div>
+       </div>
+    </div>
+
+    <button class="checkout-btn" style="height:60px;" onclick="finalizeTransaction()">
+       CONFIRM & PRINT RECEIPT
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" style="position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--on-surface); color:var(--surface); padding:12px 24px; border-radius:32px; display:flex; align-items:center; gap:12px; opacity:0; transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events:none; z-index:9999;">
+   <span id="toast-msg">Success</span>
+</div>
+
+<style>
+.toast.active { opacity: 1; bottom: 40px; }
+</style>
+
+<!-- SCRIPTS -->
+<script src="../../../data/store.js"></script>
+<script src="../../admin/settings/region/currency.js"></script>
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script src="sales-processing.js"></script>
+<script src="../../../platform/platform.js"></script>
+<script src="../../../../chatbot/chatbot.js"></script>
+
+</body>
+</html>

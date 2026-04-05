@@ -6,24 +6,39 @@
   // Prevent duplicate injection if loaded multiple times
   if (document.getElementById('chatbot-fab')) return;
 
+  // 1. Resolve Root Path (Handles deep pages in src/dashboard/...)
+  const href = window.location.href;
+  const srcIdx = href.lastIndexOf('/src/');
+  let chatbotRoot = './chatbot/'; // Default for root context
+  
+  if (srcIdx !== -1) {
+    const pathAfterSrc = href.substring(srcIdx + 5);
+    const depth = (pathAfterSrc.split('/').length - 1);
+    // Go up 'depth + 1' levels to reach the root, then into chatbot/
+    chatbotRoot = '../'.repeat(depth + 1) + 'chatbot/';
+  } else if (href.includes('.html')) {
+     // If not in src but in a subfolder (fallback)
+     chatbotRoot = '../chatbot/';
+  }
+
   // 1. Inject CSS and API Config
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = '../chatbot/chatbot.css';
+  link.href = `${chatbotRoot}chatbot.css`;
   document.head.appendChild(link);
 
   const apiScript = document.createElement('script');
-  apiScript.src = '../chatbot/integration/ai-service.js';
+  apiScript.src = `${chatbotRoot}integration/ai-service.js`;
   document.head.appendChild(apiScript);
 
   // 2. Fetch DOM HTML file and Inject it
   let htmlContent = "";
   try {
-    const res = await fetch('../chatbot/chatbot.html');
+    const res = await fetch(`${chatbotRoot}chatbot.html`);
     if (res.ok) {
       htmlContent = await res.text();
     } else {
-      console.error("Failed to load chatbot HTML:", res.status);
+      console.error("Failed to load chatbot HTML:", res.status, "at", `${chatbotRoot}chatbot.html`);
       return;
     }
   } catch (err) {
@@ -32,6 +47,7 @@
   }
 
   const container = document.createElement('div');
+  container.id = 'chatbot-container';
   container.innerHTML = htmlContent;
   document.body.appendChild(container);
 

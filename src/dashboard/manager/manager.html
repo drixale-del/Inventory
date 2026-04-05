@@ -1,141 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Dashboard — Precision POS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-    <link rel="stylesheet" href="../../../styles/modern-normalize.css">
-    <link rel="stylesheet" href="../../../styles/tokens.css">
-    <link rel="stylesheet" href="../../../styles/components.css">
-    <style>
-        .manager-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6); padding: var(--space-6); }
-        .analytics-card { background: var(--surface-container-high); border-radius: var(--round-md); padding: var(--space-6); border: 1px solid var(--outline-variant); }
-        .chart-container { height: 300px; position: relative; margin-top: var(--space-4); }
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-bottom: var(--space-6); }
-        .stat-item { background: var(--surface-container-highest); padding: var(--space-4); border-radius: var(--round-sm); }
-        .stat-val { font-size: 24px; font-weight: 700; color: var(--primary); }
-        .forecast-list { display: flex; flex-direction: column; gap: var(--space-4); }
-        .forecast-item { background: var(--surface-container-low); padding: var(--space-3); border-radius: var(--round-sm); border: 1px solid var(--outline-variant); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operations Command — Manager Ops</title>
+  <meta name="description" content="Strategic Inventory Lifecycle & High-Velocity Performance Dashboard." />
+  
+  <link rel="stylesheet" href="../cashier/styles/tokens.css" />
+  <link rel="stylesheet" href="../cashier/styles/components.css" />
+  <link rel="stylesheet" href="../cashier/styles/dashboard.css" />
+  
+  <style>
+    /* Unique Manager Analytics Styles */
+    .manager-content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+
+    .analytics-hero-card {
+      background: var(--surface-container-high);
+      border-radius: var(--round-lg);
+      padding: var(--space-6);
+      border: 1px solid var(--outline-variant);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .velocity-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .forecast-item {
+      background: var(--surface-container-low);
+      border-radius: var(--round-md);
+      padding: var(--space-4);
+      border: 1px solid var(--outline-variant);
+      transition: all 0.2s ease;
+    }
+
+    .forecast-item:hover {
+      background: var(--surface-container-highest);
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .chart-box {
+      height: 380px;
+      position: relative;
+    }
+  </style>
 </head>
-<body class="surface">
+<body>
+<div class="app-shell">
 
-    <div class="app-layout">
-        <aside class="sidebar" id="sidebar"></aside>
-
-        <main class="main-content">
-            <header class="page-header">
-                <div class="header-title">
-                    <h4>Operations Command</h4>
-                    <p class="text-secondary">Strategic Analytics & Inventory Forecasting</p>
-                </div>
-            </header>
-
-            <div class="manager-grid">
-                <!-- 1. P&L Visualizer -->
-                <div class="analytics-card" style="grid-column: span 2;">
-                    <div class="stats-row">
-                        <div class="stat-item">
-                            <div class="text-secondary" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Weekly Revenue</div>
-                            <div class="stat-val" id="revenue-val">$0.00</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="text-secondary" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Net Profit Margin</div>
-                            <div class="stat-val" id="profit-val">0.0%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="text-secondary" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Inventory Asset Value</div>
-                            <div class="stat-val" id="inventory-val">$0.00</div>
-                        </div>
-                    </div>
-                    <h6>Weekly Financial Performance</h6>
-                    <div class="chart-container">
-                        <canvas id="pl-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- 2. Stock Velocity -->
-                <div class="analytics-card">
-                    <h6>High-Velocity Products</h6>
-                    <p class="text-secondary" style="font-size:12px; margin-bottom: var(--space-4);">Items with fastest inventory turnover rate.</p>
-                    <div class="forecast-list" id="velocity-list">
-                        <!-- Filled by JS -->
-                    </div>
-                </div>
-
-                <!-- 3. Low Stock Predication -->
-                <div class="analytics-card">
-                    <h6>Replenishment Forecast</h6>
-                    <p class="text-secondary" style="font-size:12px; margin-bottom: var(--space-4);">AI-driven stockout predictions (7-day window).</p>
-                    <div class="forecast-list" id="forecast-list">
-                         <div class="forecast-item">
-                             <div style="font-weight:600; font-size:14px;">MacBook Pro M3</div>
-                             <div class="text-secondary" style="font-size:12px;">Predicted Stockout: <strong>4 Days</strong></div>
-                         </div>
-                         <div class="forecast-item">
-                             <div style="font-weight:600; font-size:14px;">Dell UltraSharp 27"</div>
-                             <div class="text-secondary" style="font-size:12px;">Predicted Stockout: <strong>6 Days</strong></div>
-                         </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">command</span>
+      Operations Command
     </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="../../../data/store.js"></script>
-    <script src="../../../renderer/nav.js"></script>
-    <script src="../../../window-manager/ui.js"></script>
-    <script src="../../../dashboard/admin/settings/region/currency.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initNav('manager-dash');
-            
-            // 1. Update Stats from Store
-            const pnl = Store.pnl;
-            const inventory = Store.getTotalStockValue();
-            
-            document.getElementById('revenue-val').textContent = Currency?.format(pnl.revenue) || '$' + pnl.revenue.toFixed(2);
-            document.getElementById('inventory-val').textContent = Currency?.format(inventory) || '$' + inventory.toFixed(2);
-            
-            const margin = pnl.revenue > 0 ? (pnl.netProfit / pnl.revenue) * 100 : 0;
-            document.getElementById('profit-val').textContent = margin.toFixed(1) + '%';
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../assets/Public/Images/logo.png" alt="App Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Strategic Manager</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Operations Hub</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
 
-            // 2. Render P&L Chart
-            const ctx = document.getElementById('pl-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: [1200, 1900, 800, 1500, 2200, 3000, 2500], // Mock historical
-                        borderColor: '#2563eb',
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true }, x: { grid: { display : false } } }
-                }
-            });
+      <!-- User Profile Fixed Footer -->
+      <div class="sidebar-footer">
+        <button class="nav-item profile-btn" onclick="toggleProfileMenu(event)">
+          <span class="material-symbols-rounded">account_circle</span>
+          <span class="nav-label">Alex Sterling</span>
+        </button>
+        <div class="sidebar-version">
+          Ops Hub · v1.0.0
+        </div>
+      </div>
+    </aside>
 
-            // 3. Render Velocity List
-            const vList = document.getElementById('velocity-list');
-            const topItems = Store.products.slice(0, 3);
-            vList.innerHTML = topItems.map(p => `
-                <div class="forecast-item" style="border-left: 3px solid var(--success);">
-                    <div style="font-weight:600; font-size:14px;">${p.name}</div>
-                    <div class="text-secondary" style="font-size:12px;">Daily Velocity: <strong>${(Math.random()*5 + 1).toFixed(1)} units/day</strong></div>
-                </div>
-            `).join('');
-        });
-    </script>
+    <!-- PAGE CONTENT -->
+    <main class="page-content" id="main-content">
+
+      <!-- Header -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Operational Command Hub</h1>
+          <p class="page-subtitle">Strategic inventory velocity, financial trends, and replenishment forecasting.</p>
+        </div>
+        <div class="page-actions">
+           <div id="live-time" style="font-size: var(--text-label-md); color: var(--on-surface-variant); font-family: monospace; margin-right: 16px;">--:--</div>
+           <button class="btn btn-secondary" onclick="navigateTo('reports')">
+             <span class="material-symbols-rounded">analytics</span>
+             Full Reports
+           </button>
+        </div>
+      </div>
+
+      <!-- Professional KPI Header -->
+      <div class="kpi-grid">
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon primary">
+              <span class="material-symbols-rounded">payments</span>
+            </div>
+            <span class="kpi-badge success">STABLE</span>
+          </div>
+          <div class="kpi-value" id="kpi-revenue">$0.00</div>
+          <div class="kpi-label">Strategic Revenue (Weekly)</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon secondary">
+              <span class="material-symbols-rounded">query_stats</span>
+            </div>
+            <div class="kpi-badge warning" id="kpi-profit-badge">TRENDING</div>
+          </div>
+          <div class="kpi-value" id="kpi-profit">0.0%</div>
+          <div class="kpi-label">Net Profit Margin</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon tertiary">
+              <span class="material-symbols-rounded">inventory</span>
+            </div>
+            <span class="kpi-badge">ASSETS</span>
+          </div>
+          <div class="kpi-value" id="kpi-assets">$0.00</div>
+          <div class="kpi-label">Total Inventory Asset Value</div>
+        </div>
+      </div>
+
+      <!-- Main Command Center -->
+      <div class="manager-content-grid">
+        <!-- 1. P&L Performance Graph -->
+        <div class="analytics-hero-card fade-in-up">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+             <div>
+               <div style="font-size:18px; font-weight:600; color:var(--on-surface);">P&L Strategic Visualizer</div>
+               <div style="font-size:12px; color:var(--on-surface-variant);">Weekly revenue performance vs targets</div>
+             </div>
+             <div style="display:flex; gap:8px;">
+                <button class="chip active">Revenue</button>
+                <button class="chip">Profit</button>
+             </div>
+          </div>
+          <div class="chart-box">
+             <canvas id="pl-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- 2. System Velocity -->
+        <div style="display:flex; flex-direction:column; gap:var(--space-6);">
+            <div class="card fade-in-up" style="padding:var(--space-6);">
+               <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                  <span class="material-symbols-rounded" style="color:var(--secondary); font-size:24px;">bolt</span>
+                  <div style="font-size:16px; font-weight:600;">System Velocity</div>
+               </div>
+               <div class="velocity-grid" id="velocity-list">
+                  <!-- Injected by logic -->
+               </div>
+            </div>
+
+            <!-- 3. Replenishment Forecast -->
+            <div class="card fade-in-up" style="padding:var(--space-6);">
+               <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                  <span class="material-symbols-rounded" style="color:var(--tertiary); font-size:24px;">psychology</span>
+                  <div style="font-size:16px; font-weight:600;">AI Forecast</div>
+               </div>
+               <div class="forecast-list" id="forecast-list">
+                 <div class="forecast-item" style="border-left: 4px solid var(--secondary);">
+                    <div style="font-weight:600; font-size:14px;">Logitech MX Master 3</div>
+                    <div class="text-secondary" style="font-size:12px; margin-top:4px;">
+                       Stockout Predicted: <strong style="color:var(--error);">48 Hours</strong>
+                    </div>
+                 </div>
+                 <div class="forecast-item" style="border-left: 4px solid var(--primary); margin-top:12px;">
+                    <div style="font-weight:600; font-size:14px;">Samsung 990 Pro 2TB</div>
+                    <div class="text-secondary" style="font-size:12px; margin-top:4px;">
+                       Stockout Predicted: <strong style="color:var(--warning);">5 Days</strong>
+                    </div>
+                 </div>
+               </div>
+               <button class="btn btn-secondary" style="width:100%; margin-top:20px;" onclick="navigateTo('smart_notifications')">
+                 Manage Inventory Alerts
+               </button>
+            </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../../data/store.js"></script>
+<script src="../../renderer/nav.js"></script>
+<script src="../../window-manager/ui.js"></script>
+<script src="../../dashboard/admin/settings/region/currency.js"></script>
+<script src="manager.js"></script>
+<script src="../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
+
 </body>
 </html>

@@ -48,14 +48,15 @@
       <nav id="sidebar-nav"></nav>
       <div class="sidebar-spacer"></div>
 
-      <!-- User Profile Action -->
-      <button class="nav-item" style="margin-bottom: var(--space-2); margin-top: auto;" onclick="toggleProfileMenu(event)">
-        <span class="material-symbols-rounded">account_circle</span>
-        <span class="nav-label">System Admin</span>
-      </button>
-
-      <div style="padding: var(--space-4) var(--space-5); font-size: var(--text-label-sm); color: var(--on-surface-variant);">
-        Enterprise · v1.0.0
+      <!-- User Profile Fixed Footer -->
+      <div class="sidebar-footer">
+        <button class="nav-item profile-btn" onclick="toggleProfileMenu(event)">
+          <span class="material-symbols-rounded">account_circle</span>
+          <span class="nav-label">System Admin</span>
+        </button>
+        <div class="sidebar-version">
+          Enterprise · v1.0.0
+        </div>
       </div>
     </aside>
 
@@ -189,5 +190,6 @@
 <script src="../../window-manager/ui.js"></script>
 <script src="admin-dashboard.js"></script>
 <script src="../../platform/platform.js"></script>
+<script src="../../../chatbot/chatbot.js"></script>
 </body>
 </html>

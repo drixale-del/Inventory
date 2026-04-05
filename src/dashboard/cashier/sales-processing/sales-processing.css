@@ -1,0 +1,212 @@
+/* ============================================================
+   sales-processing.css — High-Performance POS Terminal
+   ============================================================ */
+
+.pos-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    height: calc(100vh - var(--titlebar-height));
+    overflow: hidden;
+    background: var(--surface-dim);
+}
+
+/* 1. Products Panel */
+.pos-products {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    overflow-y: auto;
+    border-right: 1px solid var(--outline-variant);
+}
+
+.pos-header {
+    margin-bottom: var(--space-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.pos-toolbar {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-4);
+}
+
+.product-card {
+    background: var(--surface-container-low);
+    border: 1px solid var(--outline-variant);
+    border-radius: var(--round-md);
+    padding: var(--space-4);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.product-card:hover {
+    background: var(--surface-container-high);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+
+.product-card:active {
+    transform: scale(0.98);
+}
+
+.product-card .p-name {
+    font-weight: 600;
+    font-size: var(--text-body-md);
+    color: var(--on-surface);
+}
+
+.product-card .p-price {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: var(--text-title-sm);
+}
+
+.product-card .p-stock {
+    font-size: var(--text-label-sm);
+    color: var(--on-surface-variant);
+}
+
+/* 2. Live Ledger (Cart) */
+.live-ledger {
+    background: var(--surface-container-lowest);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.05);
+}
+
+.ledger-header {
+    padding: var(--space-5);
+    border-bottom: 1px solid var(--outline-variant);
+    background: var(--surface-container-low);
+}
+
+.ledger-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.ledger-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--surface-container-high);
+    border-radius: var(--round-sm);
+    animation: slideInRight 0.3s ease-out;
+}
+
+.ledger-item-info .title { font-weight: 600; font-size: 14px; }
+.ledger-item-info .meta { font-size: 12px; color: var(--on-surface-variant); }
+
+.ledger-footer {
+    padding: var(--space-6);
+    background: var(--surface-container-low);
+    border-top: 1px solid var(--outline-variant);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.ledger-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-body-md);
+    color: var(--on-surface-variant);
+}
+
+.ledger-total {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--on-surface);
+    letter-spacing: -0.5px;
+}
+
+/* Pay Button */
+.checkout-btn {
+    width: 100%;
+    padding: var(--space-5);
+    background: var(--primary);
+    color: var(--on-primary);
+    border: none;
+    border-radius: var(--round-md);
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkout-btn:hover { background: #1e52db; filter: brightness(1.1); }
+.checkout-btn:disabled { background: var(--surface-variant); color: var(--on-surface-variant); cursor: not-allowed; }
+
+/* Payment Modal */
+.payment-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.payment-card {
+    background: var(--surface-container-lowest);
+    width: 500px;
+    border-radius: var(--round-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-4);
+    animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin: var(--space-6) 0;
+}
+
+.payment-method {
+    border: 2px solid var(--outline-variant);
+    border-radius: var(--round-md);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method:hover { background: var(--surface-container-high); border-color: var(--primary-container); }
+.payment-method.active { border-color: var(--primary); background: var(--primary-container); color: var(--on-primary-container); }
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
