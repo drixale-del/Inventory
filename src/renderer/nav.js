@@ -5,41 +5,54 @@
    ============================================================ */
 
 const NAV_ITEMS = [
-  { id: 'cashier-dash', label: 'Cashier Hub', icon: 'point_of_sale', path: '../dashboard/cashier/pages/cashier.html' },
-  { id: 'manager-dash', label: 'Manager Ops', icon: 'analytics',     path: '../dashboard/manager/manager.html' },
-  { id: 'admin-dash',   label: 'Admin Nexus', icon: 'admin_panel_settings', path: '../dashboard/admin/admin.html' },
-  { id: 'pos',        label: 'POS',        icon: 'point_of_sale',   path: '../dashboard/cashier/pages/pos.html'        },
-  { id: 'inventory',  label: 'Inventory',  icon: 'inventory_2',     path: '../dashboard/cashier/pages/inventory.html'  },
-  { id: 'reports',    label: 'Reports',    icon: 'analytics',       path: '../dashboard/cashier/pages/reports.html'    },
-  { id: 'suppliers',  label: 'Suppliers',  icon: 'local_shipping',  path: '../dashboard/cashier/suppliers/suppliers.html'  },
-  { id: 'outlets',    label: 'Branches',   icon: 'storefront',      path: '../dashboard/cashier/outlets/outlets.html'  },
-  { id: 'customers',  label: 'Customers',  icon: 'groups',          path: '../dashboard/cashier/customers/customers.html' },
-  { id: 'returns',    label: 'Returns',    icon: 'assignment_return', path: '../dashboard/cashier/returns/returns.html' },
-  { id: 'automations',label: 'Automated Reports', icon: 'auto_timer', path: '../dashboard/cashier/automation/automation.html' },
-  { id: 'smart_notifications', label: 'Smart Alerts Hub', icon: 'notifications_active', path: '../dashboard/cashier/smart-notifications/index.html' },
-  { id: 'alerts',     label: 'Direct Alerts',   icon: 'notification_important', path: '../dashboard/cashier/alerts/alerts.html' },
-  { id: 'lifecycle',  label: 'Product Lifecycle', icon: 'auto_graph', path: '../dashboard/cashier/lifecycle/lifecycle.html'},
-  { id: 'pricing',    label: 'Dynamic Pricing', icon: 'price_check', path: '../dashboard/cashier/pricing/pricing.html'},
-  { id: 'promotions', label: 'Bundles & Promos', icon: 'loyalty', path: '../dashboard/cashier/promotions/promotions.html'},
-  { id: 'accounting', label: 'Accounting Sync', icon: 'account_balance_wallet', path: '../dashboard/cashier/accounting/accounting.html'},
-  { id: 'ecommerce',  label: 'E-commerce Sync', icon: 'cloud_sync', path: '../dashboard/cashier/ecommerce/ecommerce.html'},
-  { id: 'comms',      label: 'Automation & Comms', icon: 'hub', path: '../dashboard/cashier/comms/comms.html'},
-  { id: 'notifications', label: 'Push Notifications', icon: 'notification_add', path: '../dashboard/cashier/Push_notifications/notifications.html' },
+  // --- CASHIER HUB ---
+  { id: 'cashier-dash', label: 'Cashier Hub', icon: 'dashboard', groups: ['cashier'], path: '../dashboard/cashier/pages/cashier.html' },
+  { id: 'pos',        label: 'POS',        icon: 'point_of_sale',   groups: ['cashier'], path: '../dashboard/cashier/pages/pos.html'        },
+  { id: 'inventory',  label: 'Inventory',  icon: 'inventory_2',     groups: ['cashier'], path: '../dashboard/cashier/pages/inventory.html'  },
+  { id: 'reports',    label: 'Reports',    icon: 'analytics',       groups: ['cashier'], path: '../dashboard/cashier/pages/reports.html'    },
+  { id: 'suppliers',  label: 'Suppliers',  icon: 'local_shipping',  groups: ['cashier'], path: '../dashboard/cashier/suppliers/suppliers.html'  },
+  { id: 'outlets',    label: 'Branches',   icon: 'storefront',      groups: ['cashier', 'admin'], path: '../dashboard/cashier/outlets/outlets.html'  },
+  { id: 'customers',  label: 'Customers',  icon: 'groups',          groups: ['cashier'], path: '../dashboard/cashier/customers/customers.html' },
+  { id: 'returns',    label: 'Returns',    icon: 'assignment_return', groups: ['cashier'], path: '../dashboard/cashier/returns/returns.html' },
+  { id: 'automations',label: 'Automated Reports', icon: 'auto_timer', groups: ['cashier'], path: '../dashboard/cashier/automation/automation.html' },
+  { id: 'smart_notifications', label: 'Smart Alerts Hub', icon: 'notifications_active', groups: ['cashier'], path: '../dashboard/cashier/smart-notifications/index.html' },
+  { id: 'alerts',     label: 'Direct Alerts',   icon: 'notification_important', groups: ['cashier'], path: '../dashboard/cashier/alerts/alerts.html' },
+  { id: 'lifecycle',  label: 'Product Lifecycle', icon: 'auto_graph', groups: ['cashier'], path: '../dashboard/cashier/lifecycle/lifecycle.html'},
+  { id: 'pricing',    label: 'Dynamic Pricing', icon: 'price_check', groups: ['cashier'], path: '../dashboard/cashier/pricing/pricing.html'},
+  { id: 'promotions', label: 'Bundles & Promos', icon: 'loyalty', groups: ['cashier'], path: '../dashboard/cashier/promotions/promotions.html'},
+  { id: 'accounting', label: 'Accounting Sync', icon: 'account_balance_wallet', groups: ['cashier'], path: '../dashboard/cashier/accounting/accounting.html'},
+  { id: 'ecommerce',  label: 'E-commerce Sync', icon: 'cloud_sync', groups: ['cashier'], path: '../dashboard/cashier/ecommerce/ecommerce.html'},
+  { id: 'comms',      label: 'Automation & Comms', icon: 'hub', groups: ['cashier'], path: '../dashboard/cashier/comms/comms.html'},
+  { id: 'notifications', label: 'Push Notifications', icon: 'notification_add', groups: ['cashier'], path: '../dashboard/cashier/Push_notifications/notifications.html' },
+  
+  // --- ADMIN NEXUS ---
+  { id: 'admin-dash',   label: 'Admin Hub', icon: 'grid_view', groups: ['admin'], path: '../dashboard/admin/admin.html' },
+  { id: 'revenue',      label: 'Revenue',   icon: 'payments', groups: ['admin'], path: '../dashboard/admin/pages/revenue.html' },
+  { id: 'employees',    label: 'Employees', icon: 'badge',    groups: ['admin'], path: '../dashboard/admin/pages/employees.html' },
+  { id: 'billing',      label: 'Billing',   icon: 'receipt_long', groups: ['admin'], path: '../dashboard/admin/pages/billing.html' },
+  { id: 'settings',     label: 'Settings',  icon: 'settings_suggest', groups: ['admin'], path: '../dashboard/admin/pages/settings.html' },
+  
+  // --- MANAGER OPS ---
+  { id: 'manager-dash', label: 'Manager Ops', icon: 'insights', groups: ['manager'], path: '../dashboard/manager/manager.html' },
 ];
 
 function initNav(activePage) {
   const sidebar = document.getElementById('sidebar-nav');
   if (!sidebar) return;
 
-  // Only show settings if we are in an admin-related page
-  const isAdminContext = activePage === 'admin-dash' || activePage === 'settings' || window.location.href.includes('/admin/');
+  // 1. Get stored hub from session, fallback to URL detection if missing
+  let currentGroup = sessionStorage.getItem('active_hub');
   
-  let items = [...NAV_ITEMS];
-  if (isAdminContext) {
-    items.push({ id: 'settings', label: 'Settings', icon: 'settings', path: '../dashboard/admin/pages/settings.html' });
+  if (!currentGroup) {
+      const isAdminContext = activePage.startsWith('admin') || activePage === 'revenue' || activePage === 'employees' || activePage === 'billing' || activePage === 'settings' || window.location.href.includes('/admin/');
+      currentGroup = isAdminContext ? 'admin' : 'cashier';
+      sessionStorage.setItem('active_hub', currentGroup);
   }
+  
+  // Filter items based on the active role group
+  const filteredItems = NAV_ITEMS.filter(item => item.groups && item.id !== 'manager-dash' && item.groups.includes(currentGroup));
 
-  const navHtml = items.map(item => `
+  const navHtml = filteredItems.map(item => `
     <button
       class="nav-item ${item.id === activePage ? 'active' : ''}"
       onclick="navigateTo('${item.id}')"
@@ -63,7 +76,7 @@ function initNav(activePage) {
   sidebar.innerHTML = navHtml + switchRoleHtml;
 }
 
-// Absolute page paths relative to src/ (used to compute href from any subfolder)
+// Absolute page paths relative to src/
 const PAGE_PATHS = {
   launcher:     'role-selection/launcher.html',
   'cashier-dash': 'dashboard/cashier/pages/cashier.html',
@@ -75,6 +88,9 @@ const PAGE_PATHS = {
   suppliers:  'dashboard/cashier/suppliers/suppliers.html',
   outlets:    'dashboard/cashier/outlets/outlets.html',
   settings:   'dashboard/admin/pages/settings.html',
+  revenue:    'dashboard/admin/pages/revenue.html',
+  employees:  'dashboard/admin/pages/employees.html',
+  billing:    'dashboard/admin/pages/billing.html',
   customers:  'dashboard/cashier/customers/customers.html',
   returns:    'dashboard/cashier/returns/returns.html',
   automations: 'dashboard/cashier/automation/automation.html',
@@ -91,6 +107,11 @@ const PAGE_PATHS = {
 
 
 function navigateTo(page) {
+  // Update persistence if navigating to a primary hub
+  if (page === 'admin-dash') sessionStorage.setItem('active_hub', 'admin');
+  if (page === 'cashier-dash') sessionStorage.setItem('active_hub', 'cashier');
+  if (page === 'manager-dash') sessionStorage.setItem('active_hub', 'manager');
+
   // In Electron, always send the page ID — ipc.js uses the full PAGE_MAP
   if (window.electronAPI) {
     window.electronAPI.navigate(page);

@@ -1,121 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — Precision POS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-    <link rel="stylesheet" href="../../../styles/modern-normalize.css">
-    <link rel="stylesheet" href="../../../styles/tokens.css">
-    <link rel="stylesheet" href="../../../styles/components.css">
-    <style>
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6); padding: var(--space-6); }
-        .nexus-card { background: var(--surface-container-high); border-radius: var(--round-md); padding: var(--space-6); border: 1px solid var(--outline-variant); }
-        .nexus-header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); color: var(--primary); }
-        .nexus-header h6 { margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
-        .status-bullet { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; }
-        .bullet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
-        .bullet-dot.error { background: var(--error); }
-        .integration-log { font-family: 'Courier New', monospace; font-size: 11px; background: var(--surface-container-highest); padding: var(--space-3); border-radius: var(--round-sm); height: 150px; overflow-y: auto; color: var(--on-surface-variant); }
-        .log-entry { margin-bottom: 4px; display: flex; gap: 8px; }
-        .log-time { color: var(--primary); opacity: 0.7; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Hub — Precision POS</title>
+  <meta name="description" content="Enterprise Governance & Connectivity Monitoring for Precision POS." />
+  
+  <link rel="stylesheet" href="../cashier/styles/tokens.css" />
+  <link rel="stylesheet" href="../cashier/styles/components.css" />
+  <link rel="stylesheet" href="../cashier/styles/dashboard.css" />
 </head>
-<body class="surface">
+<body>
+<div class="app-shell">
 
-    <div class="app-layout">
-        <aside class="sidebar" id="sidebar"></aside>
-
-        <main class="main-content">
-            <header class="page-header">
-                <div class="header-title">
-                    <h4>Admin System Nexus</h4>
-                    <p class="text-secondary">Enterprise Governance & Connectivity Monitoring</p>
-                </div>
-            </header>
-
-            <div class="admin-grid">
-                <!-- 1. System Pulse -->
-                <div class="nexus-card">
-                    <div class="nexus-header">
-                        <span class="material-symbols-rounded">monitor_heart</span>
-                        <h6>System Pulse</h6>
-                    </div>
-                    <div class="status-bullet">
-                        <div class="bullet-dot"></div>
-                        <span>Network Connectivity: <strong id="net-status">ONLINE</strong></span>
-                    </div>
-                    <div class="status-bullet">
-                        <div class="bullet-dot"></div>
-                        <span>Database Node: <strong>ACTIVE</strong></span>
-                    </div>
-                    <div class="status-bullet">
-                        <div class="bullet-dot"></div>
-                        <span>Sync Engine: <strong>IDLE</strong></span>
-                    </div>
-                </div>
-
-                <!-- 2. Integration Status -->
-                <div class="nexus-card">
-                    <div class="nexus-header">
-                        <span class="material-symbols-rounded">hub</span>
-                        <h6>Integration Bridges</h6>
-                    </div>
-                    <div class="status-bullet">
-                        <div class="bullet-dot"></div>
-                        <span>Shopify Bridge: <strong>SYNCED</strong></span>
-                    </div>
-                    <div class="status-bullet">
-                        <div class="bullet-dot"></div>
-                        <span>Accounting Link: <strong>SECURE</strong></span>
-                    </div>
-                    <div class="status-bullet">
-                        <div class="bullet-dot error"></div>
-                        <span>Comms Engine: <strong style="color:var(--error);">FAILOVER</strong></span>
-                    </div>
-                </div>
-
-                <!-- 3. Real-Time Security Logs -->
-                <div class="nexus-card" style="grid-column: span 2;">
-                    <div class="nexus-header">
-                        <span class="material-symbols-rounded">terminal</span>
-                        <h6>Integration Activity Logs</h6>
-                    </div>
-                    <div class="integration-log" id="admin-log">
-                        <div class="log-entry"><span class="log-time">[14:22:01]</span> <span class="log-msg">AUTH: User "Admin@Bonnie" logged in successfully.</span></div>
-                        <div class="log-entry"><span class="log-time">[14:23:45]</span> <span class="log-msg">SYNC: POS transaction batch TXN-8829 dispatched to accounting.</span></div>
-                        <div class="log-entry"><span class="log-time">[14:25:12]</span> <span class="log-msg">E-COMM: Shopify inventory reconciliation complete. 2 items updated.</span></div>
-                        <div class="log-entry"><span class="log-time">[14:27:33]</span> <span class="log-msg">SYS: Connectivity monitor triggered 'Offline-Mode' event. Check failover logic.</span></div>
-                    </div>
-                </div>
-            </div>
-        </main>
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">admin_panel_settings</span>
+      Admin Nexus
     </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize" title="Minimize">
+        <span class="material-symbols-rounded">remove</span>
+      </button>
+      <button class="titlebar-btn" id="btn-maximize" title="Maximize">
+        <span class="material-symbols-rounded">crop_square</span>
+      </button>
+      <button class="titlebar-btn close" id="btn-close" title="Close">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+  </div>
 
-    <script src="../../../data/store.js"></script>
-    <script src="../../../renderer/nav.js"></script>
-    <script src="../../../window-manager/ui.js"></script>
-    <script src="../../../platform/connectivity.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initNav('admin-dash');
-            
-            // Real-time connectivity hook
-            window.addEventListener('connectivityChanged', (e) => {
-                const statusText = document.getElementById('net-status');
-                const log = document.getElementById('admin-log');
-                const isOnline = e.detail.online;
-                
-                statusText.textContent = isOnline ? 'ONLINE' : 'OFFLINE';
-                statusText.style.color = isOnline ? 'var(--success)' : 'var(--error)';
-                
-                const entry = document.createElement('div');
-                entry.className = 'log-entry';
-                entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> <span class="log-msg">SYS: Connection ${isOnline ? 'RESTORED' : 'LOST'}. Updating Nexus protocols.</span>`;
-                log.prepend(entry);
-            });
-        });
-    </script>
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <img src="../../assets/Public/Images/logo.png" alt="App Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Administrator</div>
+        </div>
+      </div>
+      <div class="sidebar-section-label">Admin Menu</div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+
+      <!-- User Profile Action -->
+      <button class="nav-item" style="margin-bottom: var(--space-2); margin-top: auto;" onclick="toggleProfileMenu(event)">
+        <span class="material-symbols-rounded">account_circle</span>
+        <span class="nav-label">System Admin</span>
+      </button>
+
+      <div style="padding: var(--space-4) var(--space-5); font-size: var(--text-label-sm); color: var(--on-surface-variant);">
+        Enterprise · v1.0.0
+      </div>
+    </aside>
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content" id="main-content">
+
+      <!-- Header -->
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Enterprise Overview</h1>
+          <p class="page-subtitle">Global system performance and administrative governance.</p>
+        </div>
+        <div class="page-actions">
+          <div id="live-time" style="font-size: var(--text-label-md); color: var(--on-surface-variant); font-family: monospace; margin-right: 16px;"></div>
+          <button class="btn btn-primary" onclick="navigateTo('settings')">
+            <span class="material-symbols-rounded">settings</span>
+            Global Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon primary">
+              <span class="material-symbols-rounded">payments</span>
+            </div>
+            <span class="kpi-badge">+18.2%</span>
+          </div>
+          <div class="kpi-value" id="kpi-total-revenue">$1,245,600</div>
+          <div class="kpi-label">Total Revenue</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon secondary">
+              <span class="material-symbols-rounded">storefront</span>
+            </div>
+            <span class="kpi-badge">8 Active</span>
+          </div>
+          <div class="kpi-value" id="kpi-branches">12</div>
+          <div class="kpi-label">Total Branches</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon tertiary">
+              <span class="material-symbols-rounded">badge</span>
+            </div>
+            <span class="kpi-badge">On Duty</span>
+          </div>
+          <div class="kpi-value" id="kpi-employees">48</div>
+          <div class="kpi-label">Total Employees</div>
+        </div>
+        <div class="kpi-card fade-in-up">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon error">
+              <span class="material-symbols-rounded">receipt_long</span>
+            </div>
+            <span class="kpi-badge alert">3 Due</span>
+          </div>
+          <div class="kpi-value" id="kpi-billing">24</div>
+          <div class="kpi-label">Billing Cycles</div>
+        </div>
+      </div>
+
+      <!-- Main content grid -->
+      <div class="content-grid">
+        <div class="left-col">
+          <!-- System Pulse -->
+          <div class="card fade-in-up">
+            <div class="card-title">System Pulse</div>
+            <div class="card-subtitle">Real-time connectivity and database health</div>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--surface-container-low); border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                   <span class="material-symbols-rounded" style="color: var(--success);">check_circle</span>
+                   <span>Main Database Node</span>
+                </div>
+                <span class="badge badge-success">STABLE</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--surface-container-low); border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                   <span class="material-symbols-rounded" style="color: var(--success);">wifi</span>
+                   <span>Global Sync Engine</span>
+                </div>
+                <span class="badge badge-success">ONLINE</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--surface-container-low); border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                   <span class="material-symbols-rounded" style="color: var(--warning);">hub</span>
+                   <span>E-commerce Bridges</span>
+                </div>
+                <span class="badge badge-warning">SYNCING</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="right-col">
+          <!-- Quick Admin Actions -->
+          <div class="card fade-in-up">
+            <div class="card-title">Administrative Actions</div>
+            <div class="quick-actions-grid">
+              <button class="quick-action-btn" onclick="navigateTo('employees')">
+                <span class="material-symbols-rounded">person_add</span>
+                Add Employee
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('outlets')">
+                <span class="material-symbols-rounded">add_business</span>
+                New Branch
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('revenue')">
+                <span class="material-symbols-rounded">account_balance</span>
+                Review P&L
+              </button>
+              <button class="quick-action-btn" onclick="navigateTo('billing')">
+                <span class="material-symbols-rounded">request_quote</span>
+                Manage Billing
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="../../data/store.js"></script>
+<script src="../../renderer/nav.js"></script>
+<script src="../../window-manager/ui.js"></script>
+<script src="admin-dashboard.js"></script>
+<script src="../../platform/platform.js"></script>
 </body>
 </html>

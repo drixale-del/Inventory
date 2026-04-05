@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revenue Analysis — Admin Hub</title>
+  <link rel="stylesheet" href="../../cashier/styles/tokens.css" />
+  <link rel="stylesheet" href="../../cashier/styles/components.css" />
+  <link rel="stylesheet" href="../../cashier/styles/dashboard.css" />
+</head>
+<body>
+<div class="app-shell">
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <span class="material-symbols-rounded filled">payments</span>
+      Revenue Analysis
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-minimize"><span class="material-symbols-rounded">remove</span></button>
+      <button class="titlebar-btn" id="btn-maximize"><span class="material-symbols-rounded">crop_square</span></button>
+      <button class="titlebar-btn close" id="btn-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar"><img src="../../../assets/Public/Images/logo.png" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Precision POS</div>
+          <div class="sidebar-user-role">Administrator</div>
+        </div>
+      </div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <button class="nav-item" style="margin-top:auto;"><span class="material-symbols-rounded">account_circle</span><span class="nav-label">System Admin</span></button>
+    </aside>
+
+    <main class="page-content">
+      <div class="page-header fade-in-up">
+        <div>
+          <h1 class="page-title">Revenue & Profitability</h1>
+          <p class="page-subtitle">Detailed financial performance across all business units.</p>
+        </div>
+      </div>
+      
+      <div class="card fade-in-up" style="margin-top: var(--space-6); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; border: 2px dashed var(--outline-variant); background: var(--surface-container-low);">
+        <span class="material-symbols-rounded" style="font-size: 64px; color: var(--on-surface-variant); opacity: 0.5;">analytics</span>
+        <h3 style="margin-top: 16px;">Revenue Insight Module</h3>
+        <p style="color: var(--on-surface-variant);">Detailed financial reports are currently being synchronized.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../../renderer/nav.js"></script>
+<script src="../../../window-manager/ui.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      initNav('revenue');
+      initWindowControls();
+  });
+</script>
+</body>
+</html>

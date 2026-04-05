@@ -32,6 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function selectRole(pageId) {
     console.log(`Entering portal: ${pageId}`);
     
+    // Set persistent hub context based on the chosen role
+    if (pageId === 'admin-dash') {
+        sessionStorage.setItem('active_hub', 'admin');
+    } else if (pageId === 'cashier-dash') {
+        sessionStorage.setItem('active_hub', 'cashier');
+    } else if (pageId === 'manager-dash') {
+        sessionStorage.setItem('active_hub', 'manager');
+    }
+
     // Add a quick feedback animation before navigating
     const selectedCard = document.getElementById(`${pageId.split('-')[0]}-card`);
     if (selectedCard) {
