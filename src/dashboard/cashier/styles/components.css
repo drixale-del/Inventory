@@ -206,6 +206,25 @@
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 .sidebar-spacer { flex: 1; }
+.sidebar-footer {
+  margin-top: auto;
+  padding-bottom: var(--space-4);
+  border-top: 1px solid var(--surface-container-high);
+}
+.sidebar-version {
+  padding: var(--space-2) var(--space-5);
+  font-size: 11px;
+  color: var(--on-surface-variant);
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.main-layout.sidebar-collapsed .sidebar-version {
+  display: none;
+}
+.profile-btn {
+  margin-top: var(--space-2);
+}
 
 /* ── PAGE CONTENT ── */
 .page-content {
@@ -657,25 +676,25 @@
 .fade-in-up:nth-child(5) { animation-delay: 200ms; }
 
 /* ============================================================
-   Global Profile Menu
+   Global Profile Menu (High Fidelity)
    ============================================================ */
 .profile-menu {
   background: var(--surface-container-high);
   border: 1px solid var(--outline-variant);
-  border-radius: var(--round-md);
-  box-shadow: var(--shadow-3);
+  border-radius: var(--round-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
   padding: var(--space-2) 0;
-  z-index: 1000;
-  width: 220px;
+  z-index: 2000;
+  width: 240px;
   
   /* Hidden state */
   opacity: 0;
   pointer-events: none;
   transform: translateY(10px) scale(0.95);
   transform-origin: bottom left;
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .profile-menu.show {
@@ -688,15 +707,16 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  padding: 12px 16px;
   color: var(--on-surface);
-  font-size: var(--text-body-sm);
+  font-size: 14px;
+  font-weight: 500;
   background: transparent;
   width: 100%;
   text-align: left;
   border: none;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .profile-menu-item:hover {
@@ -712,6 +732,13 @@
 
 .profile-menu-item:hover .material-symbols-rounded {
   color: var(--primary);
+}
+
+.profile-menu-divider {
+  height: 1px;
+  background: var(--outline-variant);
+  margin: var(--space-1) 0;
+  opacity: 0.6;
 }
 
 /* ── Region Status Message ── */

@@ -7,10 +7,10 @@
 const NAV_ITEMS = [
   // --- CASHIER HUB ---
   { id: 'cashier-dash', label: 'Cashier Hub', icon: 'dashboard', groups: ['cashier'], path: '../dashboard/cashier/pages/cashier.html' },
-  { id: 'pos',        label: 'POS',        icon: 'point_of_sale',   groups: ['cashier'], path: '../dashboard/cashier/pages/pos.html'        },
+  { id: 'pos',        label: 'POS',        icon: 'point_of_sale',   groups: ['cashier'], path: '../dashboard/cashier/sales-processing/sales-processing.html'  },
   { id: 'inventory',  label: 'Inventory',  icon: 'inventory_2',     groups: ['cashier'], path: '../dashboard/cashier/pages/inventory.html'  },
   { id: 'reports',    label: 'Reports',    icon: 'analytics',       groups: ['cashier'], path: '../dashboard/cashier/pages/reports.html'    },
-  { id: 'suppliers',  label: 'Suppliers',  icon: 'local_shipping',  groups: ['cashier'], path: '../dashboard/cashier/suppliers/suppliers.html'  },
+  { id: 'suppliers',  label: 'Suppliers',  icon: 'local_shipping',  groups: ['manager'], path: '../dashboard/manager/suppliers/suppliers.html'  },
   { id: 'outlets',    label: 'Branches',   icon: 'storefront',      groups: ['cashier', 'admin'], path: '../dashboard/cashier/outlets/outlets.html'  },
   { id: 'customers',  label: 'Customers',  icon: 'groups',          groups: ['cashier'], path: '../dashboard/cashier/customers/customers.html' },
   { id: 'returns',    label: 'Returns',    icon: 'assignment_return', groups: ['cashier'], path: '../dashboard/cashier/returns/returns.html' },
@@ -82,10 +82,10 @@ const PAGE_PATHS = {
   'cashier-dash': 'dashboard/cashier/pages/cashier.html',
   'manager-dash': 'dashboard/manager/manager.html',
   'admin-dash':   'dashboard/admin/admin.html',
-  pos:        'dashboard/cashier/pages/pos.html',
+  pos:        'dashboard/cashier/sales-processing/sales-processing.html',
   inventory:  'dashboard/cashier/pages/inventory.html',
   reports:    'dashboard/cashier/pages/reports.html',
-  suppliers:  'dashboard/cashier/suppliers/suppliers.html',
+  suppliers:  'dashboard/manager/suppliers/suppliers.html',
   outlets:    'dashboard/cashier/outlets/outlets.html',
   settings:   'dashboard/admin/pages/settings.html',
   revenue:    'dashboard/admin/pages/revenue.html',
@@ -142,17 +142,25 @@ function initTitlebar() {
 }
 
 /* ============================================================
-   Profile Menu System
+   Profile Menu System (Delegated Implementation)
    ============================================================ */
-function toggleProfileMenu(event) {
-  event.stopPropagation();
+// Listen for ALL profile button clicks across the whole document
+document.addEventListener('click', (event) => {
+  const btn = event.target.closest('.profile-btn');
+  if (btn) {
+    event.preventDefault();
+    event.stopPropagation();
+    handleProfileToggle(event, btn);
+  }
+});
+
+function handleProfileToggle(event, btn) {
   let menu = document.getElementById('global-profile-menu');
   
   if (!menu) {
     menu = document.createElement('div');
     menu.id = 'global-profile-menu';
     menu.className = 'profile-menu fade-in-up';
-    // Use an absolute position for appending so it ignores sidebar overflow
     menu.style.position = 'fixed';
     
     menu.innerHTML = `
@@ -160,13 +168,13 @@ function toggleProfileMenu(event) {
         <span class="material-symbols-rounded">description</span> Terms & Conditions
       </button>
       <button class="profile-menu-item" onclick="alert('Privacy Policy')">
-        <span class="material-symbols-rounded">policy</span> Privacy Policy
+        <span class="material-symbols-rounded">verified_user</span> Privacy Policy
       </button>
       <button class="profile-menu-item" onclick="navigateTo('settings')">
         <span class="material-symbols-rounded">settings</span> Settings
       </button>
-      <div style="height: 1px; background: var(--outline-variant); margin: var(--space-1) 0;"></div>
-      <button class="profile-menu-item" onclick="alert('Copyright 2026')">
+      <div class="profile-menu-divider"></div>
+      <button class="profile-menu-item" onclick="alert('Copyright © 2026 Precision Architect')">
         <span class="material-symbols-rounded">copyright</span> Copyright
       </button>
     `;
@@ -174,41 +182,57 @@ function toggleProfileMenu(event) {
     document.body.appendChild(menu);
   }
 
-  const isShowing = menu.classList.contains('show');
+  // Check if WE are the ones currently open
+  const wasOpen = btn.getAttribute('data-profile-open') === 'true';
 
-  // Close all other instances if exist (or just this one)
-  document.querySelectorAll('.profile-menu.show').forEach(m => m.classList.remove('show'));
+  // Force close all open profile menus and reset all buttons
+  document.querySelectorAll('.profile-menu').forEach(m => m.classList.remove('show'));
+  document.querySelectorAll('.profile-btn').forEach(b => b.setAttribute('data-profile-open', 'false'));
+  document.removeEventListener('click', closeProfileMenu);
 
-  if (!isShowing) {
-    const btnRect = event.currentTarget.getBoundingClientRect();
-    
-    // Position menu:
-    // Left edge aligns with the profile button left edge
-    // Bottom edge sits just above the profile button top edge
+  // If we were closed, open now. If we were open, we stay closed (toggle effect).
+  if (!wasOpen) {
+    const btnRect = btn.getBoundingClientRect();
     menu.style.left = btnRect.left + 'px';
     menu.style.bottom = (window.innerHeight - btnRect.top + 8) + 'px';
     
-    // Force a reflow
-    void menu.offsetWidth;
-    
+    void menu.offsetWidth; // Force reflow
     menu.classList.add('show');
+    btn.setAttribute('data-profile-open', 'true');
     
-    // Listen for outside clicks
-    document.addEventListener('click', closeProfileMenu);
-  } else {
-    document.removeEventListener('click', closeProfileMenu);
+    // Add global listener to close when clicking outside
+    setTimeout(() => {
+      document.addEventListener('click', closeProfileMenu);
+    }, 10);
+  }
+}
+
+// Function to keep HTML compatibility
+function toggleProfileMenu(event) {
+  const btn = event.currentTarget || event.target.closest('.profile-btn');
+  if (btn) {
+    event.preventDefault();
+    event.stopPropagation();
+    handleProfileToggle(event, btn);
   }
 }
 
 function closeProfileMenu(e) {
   const menu = document.getElementById('global-profile-menu');
-  if (!menu) return;
+  if (!menu || !menu.classList.contains('show')) return;
   
-  // If we click inside the menu itself (but not closing it intentionally via an item)
-  if (e.target.closest('#global-profile-menu') && !e.target.closest('.profile-menu-item')) {
+  // Ignore clicks inside the menu content
+  if (e.target.closest('.profile-menu')) {
+    if (!e.target.closest('.profile-menu-item')) return;
+  }
+  
+  // If clicking the profile button, let the main handler handle it (or ignore)
+  if (e.target.closest('.profile-btn')) {
     return;
   }
   
+  // Close menu
   menu.classList.remove('show');
+  document.querySelectorAll('.profile-btn').forEach(b => b.setAttribute('data-profile-open', 'false'));
   document.removeEventListener('click', closeProfileMenu);
 }
