@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Precision POS - Mobile Scanner</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- ZXing Library for Barcode Scanning -->
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+  <script defer src="../../../assets/local-icon-mapper.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">PRECISION<span>POS</span></div>
+            <div class="status-badge" id="conn-status">Disconnected</div>
+        </header>
+
+        <main>
+            <div id="setup-view" class="view">
+                <h1>Connect to POS</h1>
+                <p>Enter the IP address shown on your POS terminal to start scanning.</p>
+                <div class="ip-input-group">
+                    <input type="text" id="pos-ip" placeholder="e.g., 192.168.1.5" value="">
+                    <button id="btn-connect">Connect</button>
+                </div>
+                <div class="recent-ips" id="recent-ips">
+                    <!-- Recent IPs will be populated here -->
+                </div>
+            </div>
+
+            <div id="scanner-view" class="view hidden">
+                <div class="video-container">
+                    <video id="video" width="100%" height="auto"></video>
+                    <div class="scanner-overlay">
+                        <div class="target-box"></div>
+                        <div class="scan-line"></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button id="btn-stop">Stop Scanner</button>
+                    <div class="device-info">
+                        <span id="device-name">Mobile Device</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="feedback-toast" class="toast hidden">
+            <span id="toast-msg">Product Added!</span>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

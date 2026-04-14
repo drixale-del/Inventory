@@ -1,0 +1,140 @@
+/* ============================================================ */
+/* PRECISION POS — CAMERA SCANNER STYLES                        */
+/* ============================================================ */
+
+.camera-scanner-module {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--surface-container-low, #ffffff);
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--outline-variant, #e0e0e0);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Scanner ROI Overlay */
+.scanner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.scanner-box {
+    position: relative;
+    width: 240px;
+    height: 160px;
+    border: 2px solid var(--primary, #0061a4);
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Pulse Animation for Scanning Line */
+.scanner-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary, #0061a4);
+    box-shadow: 0 0 8px var(--primary, #0061a4);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { top: 0; }
+    50% { top: 100%; }
+    100% { top: 0; }
+}
+
+.scanner-instructions {
+    margin-top: 16px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Success Flash */
+.scan-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s;
+}
+
+.scan-flash.active {
+    opacity: 0.8;
+}
+
+/* Controls */
+.camera-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-camera {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background: var(--primary, #0061a4);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-camera:hover {
+    filter: brightness(1.1);
+}
+
+.btn-camera.stop {
+    background: var(--error, #ba1a1a);
+}
+
+.camera-status {
+    font-size: 13px;
+    color: var(--on-surface-variant, #44474e);
+}
+
+/* Mobile Compatibility (Future Proofing) */
+@media (max-width: 600px) {
+    .scanner-box {
+        width: 180px;
+        height: 120px;
+    }
+}
